@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<title>MCP 監控：14 天的稽核，砍掉了我自己的計畫 &mdash; 曹德偉</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #08090a;
+    --bg-elev: #101113;
+    --bg-elev-2: #16181c;
+    --border: #1f2126;
+    --border-strong: #2a2d33;
+    --fg: #f7f8f8;
+    --fg-dim: #c7c9d1;
+    --muted: #8a8f98;
+    --muted-2: #5c6068;
+    --accent: #5e6ad2;
+    --accent-hi: #8b95e8;
+    --accent-soft: rgba(94, 106, 210, 0.14);
+    --accent-glow: rgba(94, 106, 210, 0.32);
+    --success: #4cb782;
+    --warn: #d4a24c;
+    --danger: #d4584c;
+
+    --font-sans: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-serif: "Source Serif 4", "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.005em;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ====== layout ====== */
+  .container {
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+  .container-narrow {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+
+  /* ====== header ====== */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(8, 9, 10, 0.72);
+    border-bottom: 1px solid var(--border);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .brand {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+  .back-link {
+    font-size: 13px;
+    color: var(--muted);
+    transition: color 120ms ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .back-link:hover { color: var(--fg); }
+
+  /* ====== hero ====== */
+  .article-hero {
+    padding: clamp(64px, 11vw, 112px) 0 clamp(40px, 6vw, 64px);
+    border-bottom: 1px solid var(--border);
+  }
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .meta-row .sep {
+    width: 4px; height: 4px;
+    background: var(--muted-2);
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .meta-tag {
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  h1.article-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(34px, 5.6vw, 56px);
+    line-height: 1.04;
+    letter-spacing: -0.028em;
+    margin: 0 0 30px;
+    color: var(--fg);
+    max-width: 22ch;
+  }
+  .article-deck {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(19px, 2.6vw, 24px);
+    line-height: 1.5;
+    color: var(--fg-dim);
+    max-width: 30ch;
+    margin: 0 0 8px;
+  }
+  .article-deck strong {
+    font-style: normal;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--fg);
+  }
+  .article-deck .factor {
+    font-style: normal;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--accent-hi);
+    background: var(--accent-soft);
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-size: 0.92em;
+  }
+
+  /* ====== TLDR box ====== */
+  .tldr {
+    margin: 48px auto 0;
+    max-width: 720px;
+    padding: 24px 28px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+  }
+  .tldr-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .tldr ul {
+    margin: 0; padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tldr li {
+    font-family: var(--font-sans);
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--fg-dim);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .tldr li::before {
+    content: "";
+    flex-shrink: 0;
+    width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-top: 9px;
+  }
+  .tldr li strong { color: var(--fg); font-weight: 500; }
+
+  /* ====== article body ====== */
+  article {
+    padding: clamp(48px, 7vw, 80px) 0 clamp(48px, 8vw, 80px);
+  }
+  .prose {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--fg-dim);
+    max-width: 65ch;
+    margin: 0 auto;
+  }
+  .prose > * + * { margin-top: 1em; }
+  .prose h2 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(22px, 3vw, 28px);
+    letter-spacing: -0.02em;
+    color: var(--fg);
+    margin: 56px 0 18px;
+    line-height: 1.2;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .prose h2 .step-num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    background: var(--accent-soft);
+    padding: 4px 9px;
+    border-radius: 4px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .prose p {
+    margin: 0 0 1.1em;
+  }
+  .prose em {
+    font-style: italic;
+    color: var(--fg);
+  }
+  .prose strong {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--fg);
+    font-style: normal;
+  }
+  .prose code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--accent-hi);
+  }
+
+  /* ====== pieces that break the prose column ====== */
+  .full-bleed {
+    margin: 48px auto;
+    max-width: 980px;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+
+  /* ====== architecture diagram ====== */
+  .arch-block {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(24px, 4vw, 40px) clamp(16px, 3vw, 32px);
+  }
+  .arch-caption {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .arch-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  /* ====== readiness gate ====== */
+  .gate {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+  }
+  @media (min-width: 720px) {
+    .gate { grid-template-columns: 1fr auto 1fr auto 1fr; align-items: stretch; }
+  }
+  .gate-stage {
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .gate-stage[data-status="cold"] { border-color: rgba(138, 143, 152, 0.4); }
+  .gate-stage[data-status="warm"] { border-color: rgba(212, 162, 76, 0.5); background: linear-gradient(180deg, rgba(212, 162, 76, 0.04), transparent); }
+  .gate-stage[data-status="ready"] { border-color: rgba(76, 183, 130, 0.5); background: linear-gradient(180deg, rgba(76, 183, 130, 0.05), transparent); }
+  .gate-stage-name {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .gate-stage[data-status="cold"] .gate-stage-name { color: var(--muted); }
+  .gate-stage[data-status="warm"] .gate-stage-name { color: var(--warn); }
+  .gate-stage[data-status="ready"] .gate-stage-name { color: var(--success); }
+  .gate-stage-window {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+  }
+  .gate-stage-desc {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .gate-arrow {
+    align-self: center;
+    color: var(--muted-2);
+    font-family: var(--font-mono);
+    font-size: 18px;
+  }
+  @media (max-width: 719px) {
+    .gate-arrow { display: none; }
+  }
+
+  /* ====== AUDIT — the wow moment ====== */
+  .audit {
+    background:
+      radial-gradient(120% 90% at 50% 0%, rgba(212, 88, 76, 0.12) 0%, transparent 60%),
+      var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(32px, 5vw, 56px) clamp(24px, 4vw, 48px);
+    overflow: hidden;
+    position: relative;
+  }
+  .audit::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 88, 76, 0.5), transparent);
+  }
+  .audit-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--danger);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .audit-eyebrow::before {
+    content: "";
+    width: 6px; height: 6px;
+    background: var(--danger);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(212, 88, 76, 0.6);
+  }
+  .audit-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(20px, 2.8vw, 26px);
+    letter-spacing: -0.018em;
+    color: var(--fg);
+    margin: 0 0 36px;
+    max-width: 32ch;
+  }
+
+  .audit-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  @media (min-width: 860px) {
+    .audit-grid { grid-template-columns: 1.1fr 1fr; gap: 56px; }
+  }
+
+  /* the giant 0.22% block */
+  .stat-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .stat-hero-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .stat-hero-value {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(80px, 16vw, 156px);
+    line-height: 0.92;
+    letter-spacing: -0.05em;
+    color: var(--accent);
+    background: linear-gradient(180deg, var(--accent-hi) 0%, var(--accent) 70%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+  }
+  .stat-hero-unit {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .stat-hero-detail {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--fg-dim);
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .stat-hero-detail span { color: var(--muted); }
+
+  /* expected vs actual comparison */
+  .compare-list {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .compare-row { display: flex; flex-direction: column; gap: 10px; }
+  .compare-label {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .compare-label .name { color: var(--muted); }
+  .compare-label .value {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: -0.018em;
+    text-transform: none;
+  }
+  .compare-row[data-state="expected"] .value { color: var(--fg); }
+  .compare-row[data-state="actual"] .value { color: var(--danger); }
+  .bar-track {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-hi));
+  }
+  .compare-row[data-state="actual"] .bar-fill {
+    background: linear-gradient(90deg, var(--danger), #e8786c);
+    box-shadow: 0 0 10px rgba(212, 88, 76, 0.4);
+  }
+  .compare-note {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-top: -2px;
+  }
+
+  .gap-callout {
+    margin-top: 30px;
+    padding-top: 22px;
+    border-top: 1px dashed var(--border-strong);
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .gap-callout strong {
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 26px;
+    color: var(--danger);
+    letter-spacing: -0.015em;
+  }
+
+  /* ====== attribution list ====== */
+  .attribution-list {
+    list-style: none;
+    margin: 1.5em 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-family: var(--font-serif);
+  }
+  .attribution-list li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    padding: 16px 18px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    align-items: baseline;
+  }
+  .attribution-list .h-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    background: var(--accent-soft);
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    align-self: start;
+    margin-top: 3px;
+  }
+  .attribution-list .h-body {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--fg-dim);
+  }
+  .attribution-list .h-body strong {
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-weight: 500;
+    color: var(--fg);
+    display: block;
+    margin-bottom: 2px;
+    font-size: 15px;
+  }
+
+  .narrowing {
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-left: 2px solid var(--muted-2);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--muted);
+  }
+
+  /* ====== decision callout ====== */
+  .decision {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-top: 1.5em;
+  }
+  .decision-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  @media (min-width: 640px) { .decision-grid { grid-template-columns: repeat(3, 1fr); } }
+  .decision-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .decision-item .verb {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .decision-item[data-kind="kill"] .verb { color: var(--danger); }
+  .decision-item[data-kind="keep"] .verb { color: var(--success); }
+  .decision-item[data-kind="rewrite"] .verb { color: var(--accent); }
+  .decision-item .what {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--fg);
+    letter-spacing: -0.005em;
+  }
+  .decision-item .why {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ====== pull-quote ====== */
+  .pull-quote {
+    margin: 56px auto;
+    max-width: 720px;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+  .pull-quote-inner {
+    position: relative;
+    padding: 32px 36px;
+    background:
+      radial-gradient(80% 100% at 0% 0%, rgba(94, 106, 210, 0.10) 0%, transparent 70%),
+      var(--bg-elev);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-lg);
+  }
+  .pull-quote-mark {
+    position: absolute;
+    top: 6px; left: 18px;
+    font-family: var(--font-serif);
+    font-size: 64px;
+    line-height: 1;
+    color: var(--accent);
+    opacity: 0.4;
+  }
+  .pull-quote blockquote {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(20px, 2.6vw, 24px);
+    line-height: 1.45;
+    color: var(--fg);
+    padding-left: 8px;
+  }
+  .pull-quote blockquote em {
+    font-style: italic;
+    color: var(--accent-hi);
+  }
+
+  /* ====== hiring callout ====== */
+  .hiring {
+    margin: 64px auto 24px;
+    max-width: 720px;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+  .hiring-inner {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px);
+  }
+  .hiring-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .hiring-hook {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(18px, 2.4vw, 21px);
+    line-height: 1.5;
+    color: var(--fg);
+    margin: 0 0 1.2em;
+  }
+  .hiring-body {
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    line-height: 1.65;
+    color: var(--fg-dim);
+    margin: 0 0 1.2em;
+  }
+  .hiring-body strong {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--fg);
+    font-style: normal;
+  }
+  .hiring-pull {
+    margin: 1.4em 0;
+    padding: 14px 20px;
+    background: rgba(94, 106, 210, 0.06);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    line-height: 1.55;
+    color: var(--fg);
+  }
+  .hiring-pull em {
+    font-style: normal;
+    color: var(--accent-hi);
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+  .hiring-bullets {
+    list-style: none;
+    margin: 1.4em 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .hiring-bullets li {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--fg-dim);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    align-items: baseline;
+  }
+  .hiring-bullets li::before {
+    content: "\25B8";
+    color: var(--accent);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .hiring-close {
+    margin: 1.6em 0 0;
+    padding-left: 18px;
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    line-height: 1.6;
+    color: var(--fg-dim);
+  }
+  .hiring-close em {
+    font-style: normal;
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+  .hiring-rule {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 1.8em 0 1em;
+  }
+  .hiring-contact {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .hiring-contact a {
+    color: var(--accent);
+    transition: color 120ms ease;
+  }
+  .hiring-contact a:hover { color: var(--accent-hi); }
+
+  /* ====== footer ====== */
+  .article-footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0 56px;
+    margin-top: 24px;
+  }
+  .footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 14px;
+  }
+  .footer-actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    transition: color 120ms ease;
+  }
+  .footer-actions a:hover { color: var(--fg); }
+  .footer-actions a.primary { color: var(--accent); }
+  .footer-actions a.primary:hover { color: var(--accent-hi); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-dot"></span>
+        曹德偉
+      </a>
+      <a href="index.html" class="back-link">&larr; Portfolio</a>
+    </div>
+  </header>
+
+  <section class="article-hero">
+    <div class="container-narrow">
+      <div class="meta-row">
+        <span class="meta-tag">&#9733; 旗艦</span>
+        <span>2026-04-28</span>
+        <span class="sep"></span>
+        <span>8 分鐘閱讀</span>
+        <span class="sep"></span>
+        <span>Retrospective</span>
+      </div>
+      <h1 class="article-title">MCP 監控：14 天的稽核，砍掉了我自己的計畫。</h1>
+      <p class="article-deck">
+        我以為 instrumentation 會涵蓋所有 Brain 流量。兩週後，數據告訴我我錯了 <span class="factor">~450&times;</span>。
+      </p>
+    </div>
+
+    <div class="container-narrow">
+      <div class="tldr">
+        <div class="tldr-label">TL;DR</div>
+        <ul>
+          <li><strong>設計</strong>了一條異常偵測 pipeline（instrumentation &rarr; store &rarr; detector &rarr; judge &rarr; alerter）來監控 Brain 流量。</li>
+          <li><strong>14 天稽核發現涵蓋率只有 0.22%。</strong>真實流量繞過了 decorator 所在的 MCP 層——預期每天 30&ndash;60 筆事件，實際只有 ~4 筆。</li>
+          <li><strong>砍掉自己的 BQML benchmark 計畫，</strong>cron 留著（成本是零），把整個專案改寫成 portfolio retrospective。驗證假設比捍衛假設值得做。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <article>
+    <div class="prose">
+
+      <h2><span class="step-num">01</span> 假設</h2>
+      <p>
+        紙上的計畫很乾淨。<em>Brain</em>（我的私人知識系統）說 MCP。所以只要我用一個小小的 decorator 把每一次 MCP tool call 包起來、把 <code>tool_name</code>、<code>args_hash</code>、<code>latency_ms</code>、<code>status</code> 寫進 SQLite store，我就能看到整個系統的脈搏。從這裡延伸：用 z-score detector 抓每小時的異常、用 Gemini judge 過濾誤報、用 Telegram alerter 發出真正的尖峰。
+      </p>
+      <p>
+        那個沒寫下來的隱含假設是——<em>MCP 是大門</em>。只要有流量，它就會以 MCP tool call 的形式存在。Modeling 層暖機完之後，我預期會看到<strong>每天 30 到 60 筆事件</strong>。足夠 signal 做正事。
+      </p>
+
+      <h2><span class="step-num">02</span> 建置</h2>
+      <p>
+        五個小模組，每個只做一件事。我把它們部署到 EC2、用一條 15 分鐘 cron 串起來。Pipeline 長這樣：
+      </p>
+    </div>
+
+    <div class="full-bleed">
+      <div class="arch-block">
+        <div class="arch-caption">Pipeline &mdash; 5 個模組，一條 cron</div>
+        <svg class="arch-svg" viewBox="0 0 880 200" xmlns="http://www.w3.org/2000/svg" aria-label="Pipeline diagram">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6068"/>
+            </marker>
+            <linearGradient id="boxGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#16181c"/>
+              <stop offset="100%" stop-color="#101113"/>
+            </linearGradient>
+          </defs>
+
+          <!-- 5 boxes, evenly spaced -->
+          <g font-family="Inter Tight, system-ui" font-size="13" fill="#f7f8f8">
+            <g transform="translate(20,70)">
+              <rect width="140" height="60" rx="8" fill="url(#boxGrad)" stroke="#2a2d33"/>
+              <text x="70" y="28" text-anchor="middle" font-weight="600">instrumentation</text>
+              <text x="70" y="46" text-anchor="middle" font-size="10.5" fill="#8a8f98" font-family="JetBrains Mono">decorator</text>
+            </g>
+            <g transform="translate(195,70)">
+              <rect width="140" height="60" rx="8" fill="url(#boxGrad)" stroke="#2a2d33"/>
+              <text x="70" y="28" text-anchor="middle" font-weight="600">store</text>
+              <text x="70" y="46" text-anchor="middle" font-size="10.5" fill="#8a8f98" font-family="JetBrains Mono">SQLite</text>
+            </g>
+            <g transform="translate(370,70)">
+              <rect width="140" height="60" rx="8" fill="url(#boxGrad)" stroke="#2a2d33"/>
+              <text x="70" y="28" text-anchor="middle" font-weight="600">detector</text>
+              <text x="70" y="46" text-anchor="middle" font-size="10.5" fill="#8a8f98" font-family="JetBrains Mono">z-score</text>
+            </g>
+            <g transform="translate(545,70)">
+              <rect width="140" height="60" rx="8" fill="url(#boxGrad)" stroke="#5e6ad2"/>
+              <text x="70" y="28" text-anchor="middle" font-weight="600">judge</text>
+              <text x="70" y="46" text-anchor="middle" font-size="10.5" fill="#5e6ad2" font-family="JetBrains Mono">Gemini</text>
+            </g>
+            <g transform="translate(720,70)">
+              <rect width="140" height="60" rx="8" fill="url(#boxGrad)" stroke="#2a2d33"/>
+              <text x="70" y="28" text-anchor="middle" font-weight="600">alerter</text>
+              <text x="70" y="46" text-anchor="middle" font-size="10.5" fill="#8a8f98" font-family="JetBrains Mono">Telegram</text>
+            </g>
+          </g>
+
+          <!-- arrows -->
+          <g stroke="#5c6068" stroke-width="1.5" fill="none" marker-end="url(#arrow)">
+            <line x1="160" y1="100" x2="195" y2="100"/>
+            <line x1="335" y1="100" x2="370" y2="100"/>
+            <line x1="510" y1="100" x2="545" y2="100"/>
+            <line x1="685" y1="100" x2="720" y2="100"/>
+          </g>
+
+          <!-- bottom labels: hourly cron -->
+          <g font-family="JetBrains Mono" font-size="10.5" fill="#8a8f98" letter-spacing="1">
+            <text x="440" y="170" text-anchor="middle">CRON  15 * * * *  &mdash;  python -m src.monitoring.hourly</text>
+          </g>
+          <line x1="90" y1="155" x2="790" y2="155" stroke="#1f2126" stroke-dasharray="3,3"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        端對端 latency 大約 33ms / 筆。Health 很容易讀：cron 上次執行時間、列數、judge call 成功率。全綠。
+      </p>
+
+      <h2><span class="step-num">03</span> 部署</h2>
+      <p>
+        異常偵測在冷 pipeline 上統計上沒意義——樣本太少 z-score 會狂飆。所以我把 readiness 切成三個明確的階段，每一階段行為不同：
+      </p>
+    </div>
+
+    <div class="full-bleed">
+      <div class="gate">
+        <div class="gate-stage" data-status="cold">
+          <span class="gate-stage-name">Cold start</span>
+          <span class="gate-stage-window">&lt; 7 天</span>
+          <span class="gate-stage-desc">完全跳過偵測，只收資料。</span>
+        </div>
+        <span class="gate-arrow">&rarr;</span>
+        <div class="gate-stage" data-status="warm">
+          <span class="gate-stage-name">Warming</span>
+          <span class="gate-stage-window">7&ndash;14 天</span>
+          <span class="gate-stage-desc">執行偵測，輸出標註為「tentative」。不發 alert。</span>
+        </div>
+        <span class="gate-arrow">&rarr;</span>
+        <div class="gate-stage" data-status="ready">
+          <span class="gate-stage-name">Ready</span>
+          <span class="gate-stage-window">&ge; 14 天</span>
+          <span class="gate-stage-desc">完整 pipeline。Alert 上線。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        第 14 天到了。Pipeline 進入 <code>READY</code>。Cron 每 15 分鐘準時跑。Health check 全綠。所以我做了一件第一天就該做、卻沒人——包括過去的我——想到要做的事：問那個顯而易見的問題。
+      </p>
+      <p style="text-align: center; font-family: var(--font-serif); font-style: italic; color: var(--muted); font-size: 17px; margin: 28px 0;">
+        我們<em>實際</em>收到的資料，是不是當初說好要收的那份資料？
+      </p>
+
+      <h2><span class="step-num">04</span> 稽核</h2>
+      <p>
+        我數了監控系統觀察那段時間裡，Brain vault 內檔案異動的次數，再對照監控 DB 實際抓到了什麼。
+      </p>
+    </div>
+
+    <div class="full-bleed">
+      <div class="audit">
+        <div class="audit-eyebrow">涵蓋率稽核 &mdash; 14 天區間</div>
+        <h3 class="audit-title">監控看到的 vs. 實際發生的。</h3>
+
+        <div class="audit-grid">
+          <div class="stat-hero">
+            <div class="stat-hero-label">涵蓋率</div>
+            <p class="stat-hero-value">0.22%</p>
+            <div class="stat-hero-unit">的 Brain 流量真的被 instrumentation 抓到。</div>
+            <div class="stat-hero-detail">
+              <span>2 筆事件入庫</span> &nbsp;/&nbsp; <span>897 次檔案異動</span>
+            </div>
+          </div>
+
+          <div class="compare-list">
+            <div class="compare-row" data-state="expected">
+              <div class="compare-label">
+                <span class="name">每日預期事件數</span>
+                <span class="value">30&ndash;60</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill" style="width: 100%;"></div></div>
+              <div class="compare-note">基於 pipeline 修法後觀察到的 Brain 活動量。</div>
+            </div>
+
+            <div class="compare-row" data-state="actual">
+              <div class="compare-label">
+                <span class="name">每日實際事件數</span>
+                <span class="value">~4</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill" style="width: 8%;"></div></div>
+              <div class="compare-note">9 天累積 21&ndash;29 筆。差了一個數量級。</div>
+            </div>
+
+            <div class="gap-callout">
+              <strong>~450&times;</strong>
+              <span>監控能看到的世界，跟 Brain 實際身處的世界，落差這麼大。</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        Pipeline 在跑。Pipeline 是健康的。Pipeline 幾乎什麼都沒看到。
+      </p>
+      <p>
+        Brain 99.78% 的真實流量根本不從 MCP 進來。它從 Telegram bot 進來，或從內部 REST handler<em>直接</em>呼叫核心函式進來——bypass 掉我 instrumentation 所在的 decorator 層。MCP 大門只是三道門裡的一道，而且看起來是最少人走的那一道。
+      </p>
+
+      <h2><span class="step-num">05</span> 歸因</h2>
+      <p>
+        落差一旦看見，下一個問題就是漏點<em>到底</em>在哪裡。我目前有三個還活著的假設；root cause 還沒完全收斂。
+      </p>
+      <ul class="attribution-list">
+        <li>
+          <span class="h-num">H1</span>
+          <span class="h-body">
+            <strong>Decorator 在執行中的 process 沒生效。</strong>
+            Instrumentation 包的是 MCP 層的 entry point。如果 runtime 先 import 了未包裝的模組——Python import 順序很脆弱——decorator 就會悄悄地沒套上。沒 error，沒 log line。
+          </span>
+        </li>
+        <li>
+          <span class="h-num">H2</span>
+          <span class="h-body">
+            <strong>GHA deploy 沒重啟長駐 service。</strong>
+            CI 把新 code 推上去，但 EC2 上的 systemd unit 沒被 restart。新的 decorator 在硬碟上，舊的 process 還在記憶體裡。這個問題會一直咬到下一次重開機。
+          </span>
+        </li>
+        <li>
+          <span class="h-num">H3</span>
+          <span class="h-body">
+            <strong>MCP 流量本來就低。</strong>
+            Brain 的互動大多走 TG bot 跟 REST。MCP 是留給 Claude Code session 用的——比我以為的還少見。如果是這樣，那「監控沒問題，它只是看著最安靜的那道門」。
+          </span>
+        </li>
+      </ul>
+      <div class="narrowing">
+        要收斂這三個假設並不難——tail systemd log、放一條 debug trace、重新數一次——值得花幾小時。但<em>不</em>值得在還沒搞清楚是哪一個之前花好幾週重建 pipeline。
+      </div>
+
+      <h2><span class="step-num">06</span> 決策</h2>
+      <p>
+        我原本的下一步是用抓到的資料跑一場 BQML TimesFM benchmark——把 zero-shot foundation model 跟我的 z-score baseline 比一比。每天 ~4 筆事件，這場比較統計上沒意義。所以我在同一個小時內做了三個決定：
+      </p>
+      <div class="decision">
+        <div class="decision-grid">
+          <div class="decision-item" data-kind="kill">
+            <span class="verb">&times; 砍掉</span>
+            <span class="what">BQML benchmark 計畫</span>
+            <span class="why">樣本量撐不起這場比較。再厲害的模型也救不了。</span>
+          </div>
+          <div class="decision-item" data-kind="keep">
+            <span class="verb">&#10003; 保留</span>
+            <span class="what">Cron 不動</span>
+            <span class="why">成本實質上是零。如果之後修好 instrumentation，它還能當 baseline。</span>
+          </div>
+          <div class="decision-item" data-kind="rewrite">
+            <span class="verb">&rarr; 改寫</span>
+            <span class="what">專案定位</span>
+            <span class="why">從「成功運作的監控系統」改寫成「教會我東西的監控系統」。</span>
+          </div>
+        </div>
+      </div>
+
+      <h2><span class="step-num">07</span> 核心反思</h2>
+      <p>
+        我蓋的東西全都正常。Decorator 33ms 跑完。Detector 算得出來。Judge 會回。Alerter 會送。Pipeline 沒有一個環節壞掉。
+      </p>
+      <p>
+        但它不重要，因為底下的假設錯了，而我所有的 health check<em>永遠</em>不會告訴我。Health 告訴你「機器有開」。Coverage 才告訴你「機器有對著正確的東西」。
+      </p>
+    </div>
+
+    <div class="pull-quote">
+      <div class="pull-quote-inner">
+        <span class="pull-quote-mark">&ldquo;</span>
+        <blockquote>
+          自動化系統必須跑 14 天涵蓋率稽核，不只是 health check。<em>『有在跑』 &ne; 『有在做事』。</em>
+        </blockquote>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        對一個正在運作的系統來說，最難的不是加東西——而是去問「已經有的東西，是否真的指向現實」。我現在把這件事當作每一套自動化系統的硬性 14 天交付物，跟 build 本身並列：一個數字、一個驗證日期、以及如果數字不吻合就把專案砍掉的意願。
+      </p>
+      <p>
+        那個動作，才是真正困難的地方。
+      </p>
+    </div>
+  </article>
+
+  <section class="hiring">
+    <div class="hiring-inner">
+      <div class="hiring-eyebrow">如果你正在徵人 &middot; If you're hiring</div>
+
+      <p class="hiring-hook">
+        你的 LLM 功能上線了。Health check 全綠。<br />
+        但你不知道它有沒有在做正確的事——對吧？
+      </p>
+
+      <p class="hiring-body">
+        我為自己的 MCP server 蓋監控，第一次發現 99.78% 流量沒被監控到，修完後第二次發現新假設又錯了。上面這段就是這個故事。
+      </p>
+
+      <div class="hiring-pull">
+        <em>「程式在跑」&ne;「系統有效」</em>是這次最關鍵的洞察。如果你的 AI 新創需要一個會 audit 自己假設的人，我在你公司會這樣做事：
+      </div>
+
+      <ul class="hiring-bullets">
+        <li>設計時盡量縮小。MVP 上 production，14 天後 audit 自己——數字不對就砍，不靠 sunk cost 撐。</li>
+        <li>寫 founder / PM / 客戶讀得懂的決策摘要。第 6 段那個 KILL/KEEP/REWRITE 卡就是範本。</li>
+        <li>「Pipeline 在跑、但不知道有沒有在做事」這類問題我會主動找出來。Brain 的 instrumentation / alerter / cron 全套我自己 ship 過 14 個月。</li>
+      </ul>
+
+      <p class="hiring-close">
+        我不寫 ML model，也不號稱資深架構師。<br />
+        <em>「能 kill 自己的計畫比能寫程式更稀缺」</em>是我的核心優勢。
+      </p>
+
+      <hr class="hiring-rule" />
+
+      <div class="hiring-contact">
+        <a href="mailto:zx2241384@gmail.com">zx2241384@gmail.com</a> &middot; 開放遠端 / 台北
+      </div>
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container-narrow footer-actions">
+      <a href="index.html">&larr; 回 Portfolio</a>
+      <a class="primary" href="https://github.com/zx22413" target="_blank" rel="noopener">在 GitHub 上討論 &#x2197;</a>
+    </div>
+  </footer>
+</body>
+</html>

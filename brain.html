@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<title>Brain &mdash; 跑了 14 個月的私人知識系統 &mdash; 曹德偉</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #08090a;
+    --bg-elev: #101113;
+    --bg-elev-2: #16181c;
+    --border: #1f2126;
+    --border-strong: #2a2d33;
+    --fg: #f7f8f8;
+    --fg-dim: #c7c9d1;
+    --muted: #8a8f98;
+    --muted-2: #5c6068;
+    --accent: #5e6ad2;
+    --accent-hi: #8b95e8;
+    --accent-soft: rgba(94, 106, 210, 0.14);
+    --accent-glow: rgba(94, 106, 210, 0.32);
+    --success: #4cb782;
+    --warn: #d4a24c;
+    --danger: #d4584c;
+
+    --font-sans: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-serif: "Source Serif 4", "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.005em;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .container {
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+  .container-narrow {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+
+  /* ====== header ====== */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(8, 9, 10, 0.72);
+    border-bottom: 1px solid var(--border);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .brand {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+  nav ul {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    margin: 0; padding: 0;
+  }
+  nav a {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 13px;
+    color: var(--muted);
+    border-radius: var(--radius-sm);
+    transition: color 120ms ease, background 120ms ease;
+  }
+  nav a:hover { color: var(--fg); background: var(--bg-elev); }
+
+  /* ====== hero ====== */
+  .article-hero {
+    padding: clamp(64px, 11vw, 112px) 0 clamp(40px, 6vw, 64px);
+    border-bottom: 1px solid var(--border);
+  }
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .meta-row .sep {
+    width: 4px; height: 4px;
+    background: var(--muted-2);
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .meta-tag {
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  h1.article-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(34px, 5.6vw, 56px);
+    line-height: 1.04;
+    letter-spacing: -0.028em;
+    margin: 0 0 30px;
+    color: var(--fg);
+    max-width: 22ch;
+  }
+  .article-deck {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(19px, 2.6vw, 24px);
+    line-height: 1.5;
+    color: var(--fg-dim);
+    max-width: 32ch;
+    margin: 0 0 32px;
+  }
+  .article-deck strong {
+    font-style: normal;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--fg);
+  }
+
+  .stats-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: 28px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-cell {
+    flex: 1 1 140px;
+    padding: 14px 18px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat-cell:last-child { border-right: none; }
+  .stat-cell .v {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+  }
+  .stat-cell .l {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ====== TLDR box ====== */
+  .tldr {
+    margin: 48px auto 0;
+    max-width: 720px;
+    padding: 24px 28px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+  }
+  .tldr-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .tldr ul {
+    margin: 0; padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tldr li {
+    font-family: var(--font-sans);
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--fg-dim);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .tldr li::before {
+    content: "";
+    flex-shrink: 0;
+    width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-top: 9px;
+  }
+  .tldr li strong { color: var(--fg); font-weight: 500; }
+  .tldr li code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    color: var(--accent-hi);
+  }
+
+  /* ====== article body ====== */
+  article {
+    padding: clamp(48px, 7vw, 80px) 0 clamp(48px, 8vw, 80px);
+  }
+  .prose {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--fg-dim);
+    max-width: 65ch;
+    margin: 0 auto;
+  }
+  .prose > * + * { margin-top: 1em; }
+  .prose h2 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(22px, 3vw, 28px);
+    letter-spacing: -0.02em;
+    color: var(--fg);
+    margin: 56px 0 18px;
+    line-height: 1.2;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .prose h2 .step-num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    background: var(--accent-soft);
+    padding: 4px 9px;
+    border-radius: 4px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .prose h3 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -0.015em;
+    color: var(--fg);
+    margin: 36px 0 10px;
+    line-height: 1.3;
+  }
+  .prose p { margin: 0 0 1.1em; }
+  .prose em {
+    font-style: italic;
+    color: var(--fg);
+  }
+  .prose strong {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--fg);
+    font-style: normal;
+  }
+  .prose code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--accent-hi);
+  }
+  .prose a {
+    color: var(--accent-hi);
+    border-bottom: 1px solid rgba(139, 149, 232, 0.3);
+    transition: border-color 120ms ease, color 120ms ease;
+  }
+  .prose a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ====== full-bleed ====== */
+  .full-bleed {
+    margin: 48px auto;
+    max-width: 980px;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+
+  /* ====== architecture diagram ====== */
+  .arch-block {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(24px, 4vw, 40px) clamp(16px, 3vw, 32px);
+  }
+  .arch-caption {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .arch-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  /* ====== design choices ====== */
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .choice {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .choice:last-child { border-bottom: none; }
+  .choice-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    background: var(--accent-soft);
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+  .choice-q {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(18px, 2.4vw, 22px);
+    letter-spacing: -0.018em;
+    color: var(--fg);
+    margin: 0 0 16px;
+    line-height: 1.3;
+  }
+  .choice-q em {
+    font-style: normal;
+    color: var(--accent-hi);
+  }
+  .choice-body {
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    line-height: 1.65;
+    color: var(--fg-dim);
+    margin: 0;
+  }
+  .choice-body strong {
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-weight: 500;
+    color: var(--fg);
+  }
+  .choice-body em {
+    font-style: italic;
+    color: var(--fg);
+  }
+  .choice-body code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--accent-hi);
+  }
+  .choice-link {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--accent-hi);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 120ms ease, border-color 120ms ease;
+  }
+  .choice-link:hover {
+    background: var(--bg-elev-2);
+    border-color: var(--accent);
+  }
+  .choice-link .arrow { transition: transform 160ms ease; }
+  .choice-link:hover .arrow { transform: translateX(3px); }
+
+  /* ====== claims ====== */
+  .claims {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 1.5em 0;
+  }
+  .claim {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    padding: 20px 22px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    align-items: baseline;
+  }
+  .claim-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--success);
+    letter-spacing: 0.1em;
+    background: rgba(76, 183, 130, 0.1);
+    border: 1px solid rgba(76, 183, 130, 0.25);
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    align-self: start;
+    margin-top: 3px;
+  }
+  .claim-body {
+    font-family: var(--font-serif);
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--fg-dim);
+  }
+  .claim-body strong {
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-weight: 500;
+    color: var(--fg);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 15.5px;
+    letter-spacing: -0.005em;
+  }
+  .claim-body em {
+    font-style: italic;
+    color: var(--muted);
+  }
+
+  /* ====== hiring callout (reused from retrospective) ====== */
+  .hiring {
+    margin: 64px auto 24px;
+    max-width: 720px;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+  .hiring-inner {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px);
+  }
+  .hiring-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .hiring-hook {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(18px, 2.4vw, 21px);
+    line-height: 1.5;
+    color: var(--fg);
+    margin: 0 0 1.2em;
+  }
+  .hiring-body {
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    line-height: 1.65;
+    color: var(--fg-dim);
+    margin: 0 0 1.2em;
+  }
+  .hiring-body strong {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--fg);
+    font-style: normal;
+  }
+  .hiring-pull {
+    margin: 1.4em 0;
+    padding: 14px 20px;
+    background: rgba(94, 106, 210, 0.06);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    line-height: 1.55;
+    color: var(--fg);
+  }
+  .hiring-pull em {
+    font-style: normal;
+    color: var(--accent-hi);
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+  .hiring-close {
+    margin: 1.6em 0 0;
+    padding-left: 18px;
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    line-height: 1.6;
+    color: var(--fg-dim);
+  }
+  .hiring-close em {
+    font-style: normal;
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+  .hiring-rule {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 1.8em 0 1em;
+  }
+  .hiring-contact {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .hiring-contact a {
+    color: var(--accent);
+    transition: color 120ms ease;
+  }
+  .hiring-contact a:hover { color: var(--accent-hi); }
+
+  /* ====== footer ====== */
+  .article-footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0 56px;
+    margin-top: 24px;
+  }
+  .footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 14px;
+  }
+  .footer-actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    transition: color 120ms ease;
+  }
+  .footer-actions a:hover { color: var(--fg); }
+  .footer-actions a.primary { color: var(--accent); }
+  .footer-actions a.primary:hover { color: var(--accent-hi); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-dot"></span>
+        曹德偉
+      </a>
+      <nav>
+        <ul>
+          <li><a href="index.html#projects">專案</a></li>
+          <li><a href="about.html">關於</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="article-hero">
+    <div class="container-narrow">
+      <div class="meta-row">
+        <span class="meta-tag">Production</span>
+        <span>14 個月運作</span>
+        <span class="sep"></span>
+        <span>Architecture</span>
+      </div>
+      <h1 class="article-title">Brain &mdash; 跑了 14 個月的私人知識系統。</h1>
+      <p class="article-deck">
+        為自己蓋的 <strong>AI infrastructure</strong>，從 daily-driven 中學設計。
+      </p>
+
+      <div class="stats-strip">
+        <div class="stat-cell"><span class="v">14 個月</span><span class="l">運作</span></div>
+        <div class="stat-cell"><span class="v">24/7</span><span class="l">on production</span></div>
+        <div class="stat-cell"><span class="v">daily</span><span class="l">driven</span></div>
+        <div class="stat-cell"><span class="v">5</span><span class="l">OSS extracts</span></div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+      <div class="tldr">
+        <div class="tldr-label">TL;DR</div>
+        <ul>
+          <li><strong>入口</strong>：Telegram Bot / REST API / MCP server。</li>
+          <li><strong>核心</strong>：SQLite + FTS5 + 向量混合搜尋 + 熱度衰減記憶層。</li>
+          <li><strong>部署</strong>：CF Workers + EC2 + GitHub Actions，全 production。</li>
+          <li><strong>產出</strong>：從 Brain 抽出 <code>5 個</code> 獨立 OSS modules（forget-rag、mcp-fts5-starter 等）。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <article>
+    <div class="prose">
+      <h2><span class="step-num">01</span> 系統架構</h2>
+      <p>
+        Brain 不是 demo，是我每天用的東西。為了維持 daily-driven，它必須做到三件事：<em>多入口</em>（手機、桌機、Claude Code session 都能進）、<em>單一真相</em>（vault + SQLite 是 source of truth，其他都是 view）、以及<em>不會壞</em>（cron + GitHub Actions 是 backbone，real-time push 是奢侈品）。
+      </p>
+    </div>
+
+    <div class="full-bleed">
+      <div class="arch-block">
+        <div class="arch-caption">三層架構 &mdash; Entry / Core / Storage + 橫切監控</div>
+        <svg class="arch-svg" viewBox="0 0 880 460" xmlns="http://www.w3.org/2000/svg" aria-label="Brain architecture diagram">
+          <defs>
+            <marker id="brarr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6068"/>
+            </marker>
+            <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#16181c"/>
+              <stop offset="100%" stop-color="#101113"/>
+            </linearGradient>
+            <linearGradient id="coreGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="rgba(94, 106, 210, 0.18)"/>
+              <stop offset="100%" stop-color="rgba(94, 106, 210, 0.06)"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Layer labels -->
+          <g font-family="JetBrains Mono" font-size="10.5" fill="#5c6068" letter-spacing="1.5">
+            <text x="40" y="55">[ENTRY LAYER]</text>
+            <text x="40" y="195">[CORE LAYER]</text>
+            <text x="40" y="335">[STORAGE LAYER]</text>
+          </g>
+
+          <!-- Entry layer: 3 entry points -->
+          <g font-family="Inter Tight, system-ui" font-size="13" fill="#f7f8f8">
+            <g transform="translate(160, 40)">
+              <rect width="170" height="60" rx="8" fill="url(#bgGrad)" stroke="#2a2d33"/>
+              <text x="85" y="28" text-anchor="middle" font-weight="600">Telegram Bot</text>
+              <text x="85" y="46" text-anchor="middle" font-size="10.5" fill="#8a8f98" font-family="JetBrains Mono">主入口</text>
+            </g>
+            <g transform="translate(355, 40)">
+              <rect width="170" height="60" rx="8" fill="url(#bgGrad)" stroke="#2a2d33"/>
+              <text x="85" y="28" text-anchor="middle" font-weight="600">REST API</text>
+              <text x="85" y="46" text-anchor="middle" font-size="10.5" fill="#8a8f98" font-family="JetBrains Mono">PWA / 排程</text>
+            </g>
+            <g transform="translate(550, 40)">
+              <rect width="170" height="60" rx="8" fill="url(#bgGrad)" stroke="#2a2d33"/>
+              <text x="85" y="28" text-anchor="middle" font-weight="600">MCP Server</text>
+              <text x="85" y="46" text-anchor="middle" font-size="10.5" fill="#8a8f98" font-family="JetBrains Mono">Claude Code</text>
+            </g>
+          </g>
+
+          <!-- Arrows entry -> core -->
+          <g stroke="#5c6068" stroke-width="1.5" fill="none" marker-end="url(#brarr)">
+            <line x1="245" y1="100" x2="380" y2="170"/>
+            <line x1="440" y1="100" x2="440" y2="170"/>
+            <line x1="635" y1="100" x2="500" y2="170"/>
+          </g>
+
+          <!-- Core layer: knowledge processor -->
+          <g transform="translate(160, 180)">
+            <rect width="560" height="80" rx="10" fill="url(#coreGrad)" stroke="#5e6ad2"/>
+            <text x="280" y="32" text-anchor="middle" font-family="Inter Tight, system-ui" font-size="15" font-weight="600" fill="#f7f8f8">Knowledge Processor (Python)</text>
+            <text x="280" y="55" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#8b95e8">ingestion &middot; parsing &middot; linking &middot; hybrid retrieval &middot; daily-digest</text>
+          </g>
+
+          <!-- Arrow core -> storage -->
+          <g stroke="#5c6068" stroke-width="1.5" fill="none" marker-end="url(#brarr)">
+            <line x1="440" y1="260" x2="440" y2="320"/>
+          </g>
+
+          <!-- Storage layer -->
+          <g transform="translate(160, 320)">
+            <rect width="560" height="92" rx="10" fill="url(#bgGrad)" stroke="#2a2d33"/>
+            <text x="280" y="28" text-anchor="middle" font-family="Inter Tight, system-ui" font-size="14" font-weight="600" fill="#f7f8f8">Vault (.md files in Obsidian)</text>
+            <line x1="40" y1="42" x2="520" y2="42" stroke="#1f2126" stroke-dasharray="3,3"/>
+            <text x="280" y="62" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#c7c9d1">+ SQLite (FTS5 + 向量索引)</text>
+            <text x="280" y="80" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#c7c9d1">+ forget-rag 三層梯度</text>
+          </g>
+
+          <!-- Cross-cutting monitoring -->
+          <g transform="translate(740, 180)">
+            <rect width="120" height="220" rx="10" fill="url(#bgGrad)" stroke="#5c6068" stroke-dasharray="4,4"/>
+            <text x="60" y="30" text-anchor="middle" font-family="JetBrains Mono" font-size="10.5" fill="#8a8f98" letter-spacing="1">[MONITORING]</text>
+            <g font-family="Inter Tight, system-ui" font-size="11.5" fill="#c7c9d1">
+              <text x="60" y="62" text-anchor="middle">instrumentation</text>
+              <text x="60" y="82" text-anchor="middle" font-size="10" fill="#8a8f98">&darr;</text>
+              <text x="60" y="102" text-anchor="middle">store</text>
+              <text x="60" y="122" text-anchor="middle" font-size="10" fill="#8a8f98">&darr;</text>
+              <text x="60" y="142" text-anchor="middle">detector</text>
+              <text x="60" y="162" text-anchor="middle" font-size="10" fill="#8a8f98">&darr;</text>
+              <text x="60" y="182" text-anchor="middle">judge</text>
+              <text x="60" y="202" text-anchor="middle" font-size="10" fill="#8a8f98">&darr;</text>
+            </g>
+            <text x="60" y="218" text-anchor="middle" font-family="Inter Tight, system-ui" font-size="11.5" fill="#d4584c">alerter</text>
+          </g>
+
+          <!-- Bottom retrospective link -->
+          <g font-family="Source Serif 4, serif" font-size="13" font-style="italic" fill="#8a8f98">
+            <text x="440" y="445" text-anchor="middle">&rarr; 完整故事看 MCP Monitoring Retrospective</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        三個入口都直連 core layer，不經過彼此。<em>這是設計選擇，不是巧合</em>——任何一個入口掛了，其他兩個還能用。Daily-driven 的 system 最怕單點失敗，因為單點失敗會逼你開電腦修，而開電腦修這件事本身就是 daily-driven 的反義詞。
+      </p>
+
+      <h2><span class="step-num">02</span> 5 個關鍵設計選擇</h2>
+      <p>
+        這 5 個選擇是 Brain 跟「另一個 RAG demo」差最多的地方。每一個都是 trade-off，每一個都在 14 個月的 daily-driven 中真的被驗證過。
+      </p>
+    </div>
+
+    <div class="full-bleed">
+      <div class="choices">
+
+        <div class="choice">
+          <span class="choice-num">Choice 01</span>
+          <h3 class="choice-q">為什麼 <em>SQLite + FTS5</em> 而非 vector DB？</h3>
+          <p class="choice-body">
+            啟動 cost 低、樹莓派跑得動、不用 <code>docker compose</code> 起 4 個 service。<strong>FTS5 解 80% 搜尋場景</strong>。剩下 20% 才接 Gemini embeddings 做 hybrid。決策原則：<em>start with the simplest thing that works</em>。如果有一天 SQLite 撐不住了，那是個好問題——但還沒到那一天。
+          </p>
+        </div>
+
+        <div class="choice">
+          <span class="choice-num">Choice 02</span>
+          <h3 class="choice-q">為什麼 <em>熱度衰減 + 三層儲存</em> 而非無限保留？</h3>
+          <p class="choice-body">
+            Brain 跑 14 個月，舊筆記變 noise。RAG 撈到 2024 年的舊草稿打斷正在做的事。<strong>L1（熱）/ L2（溫）/ L3（歸檔）不刪除舊資料</strong>，只是讓 RAG 預設只看 L1+L2。能不能搜到 L3 是用戶顯式選擇。Production knowledge system 的合理 default 是<em>「最近的最重要」</em>，不是「全部都重要」。這個 module 後來抽出來變成 <code>forget-rag</code>。
+          </p>
+        </div>
+
+        <div class="choice">
+          <span class="choice-num">Choice 03</span>
+          <h3 class="choice-q">為什麼 <em>TG Bot</em> 是主入口而非 Web UI？</h3>
+          <p class="choice-body">
+            我在哪、Bot 在哪。手機上、辦公室、家裡——同一個 chat。Web UI 要設計 UX、處理 session、做 auth；Bot <strong>直接用 Telegram 的 infra</strong>，省 90% 工。trade-off 是一次只能服務我一個人——但 Brain 本來就是<em>私人系統</em>。當需求是 daily-driven 的個人 productivity，從工程量回推入口設計才對。
+          </p>
+        </div>
+
+        <div class="choice">
+          <span class="choice-num">Choice 04</span>
+          <h3 class="choice-q">為什麼 <em>daily-driven cron</em> 而非 real-time push？</h3>
+          <p class="choice-body">
+            日報 / 週報 / 維護任務全是 cron。實時 push 要處理 backpressure / retry / dead letter queue，<strong>cron 只要 retry-on-fail 就好</strong>。錯誤面積差一個數量級。trade-off 是 latency——但個人知識系統不需要 sub-second，<em>需要的是不會壞</em>。Brain 上線 14 個月，cron 任務的恢復成本接近零；real-time push 一壞就要花一整個下午查 queue。
+          </p>
+        </div>
+
+        <div class="choice">
+          <span class="choice-num">Choice 05</span>
+          <h3 class="choice-q">為什麼 ship MCP 監控但 <em>14 天後砍計畫</em>？</h3>
+          <p class="choice-body">
+            Phase 0 上線後 audit 發現 instrumentation 只抓到 <strong>0.22% 流量</strong>。沒救了——剩下 99.78% 走 Bot/REST 直呼核心，根本不過 MCP。當下我有兩個選擇：花一個月修 instrumentation 架構，或承認假設錯、砍掉 Phase 1 的 BQML benchmark 計畫，把這次經驗寫成 retrospective。<em>我選後者</em>。Sunk cost 是最危險的 anti-pattern，14 天後的 audit 就是設計來破除它的。
+          </p>
+          <a class="choice-link" href="mcp-retrospective.html">
+            完整故事看 MCP Monitoring Retrospective <span class="arrow">&rarr;</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="prose">
+      <h2><span class="step-num">03</span> 這個系統證明我能在 AI 新創做什麼</h2>
+      <p>
+        Portfolio 不是「給你看程式碼有多漂亮」，是<em>把抽象能力翻譯成可驗證的 claim</em>。Brain 跑了 14 個月，下面三條是它證明的東西——每一條都有 evidence，不是 buzzword：
+      </p>
+      <div class="claims">
+        <div class="claim">
+          <span class="claim-num">Claim 01</span>
+          <span class="claim-body">
+            <strong>設計 production 級 AI infrastructure。</strong>
+            <em>14 個月真的在跑，不是 demo。</em>多入口、單一真相、cron-as-backbone，從頭自己設計、自己 ship、自己 maintain。
+          </span>
+        </div>
+        <div class="claim">
+          <span class="claim-num">Claim 02</span>
+          <span class="claim-body">
+            <strong>在 cost / complexity 之間權衡。</strong>
+            <em>SQLite 不是 sexy 的選擇，但是對的選擇。</em>Vector DB / Kubernetes / 微服務都是「之後再說」的奢侈品；個人系統的對的 default 是<code>start small</code>。
+          </span>
+        </div>
+        <div class="claim">
+          <span class="claim-num">Claim 03</span>
+          <span class="claim-body">
+            <strong>Ship 後願意 audit 自己。</strong>
+            <em>MCP 監控的 retrospective 是 evidence。</em>14 天後跑 coverage audit、發現假設錯、砍掉自己的計畫——能 kill 自己的計畫比能寫程式更稀缺。
+          </span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <section class="hiring">
+    <div class="hiring-inner">
+      <div class="hiring-eyebrow">如果你正在徵人 &middot; If you're hiring</div>
+
+      <p class="hiring-hook">
+        你的 AI 新創需要的不是另一個寫 demo 的人，<br />
+        是一個會把 demo 推進 production、再 audit 自己的人。
+      </p>
+
+      <p class="hiring-body">
+        Brain 跑了 <strong>14 個月</strong>。多入口、混合搜尋、熱度衰減、cron-as-backbone，全自己設計自己 ship。它不是在 GitHub 上躺著的 starter repo——是我每天在用的 daily-driven 系統。
+      </p>
+
+      <div class="hiring-pull">
+        <em>「程式在跑」&ne;「系統有效」</em>是我學到最關鍵的洞察。如果你的 AI 新創需要一個會設計 production AI infra、會在 cost 和 complexity 之間做選擇、會 audit 自己的 Solution Architect——我們可以聊聊。
+      </div>
+
+      <p class="hiring-close">
+        我不寫 ML model，也不號稱資深架構師。<br />
+        <em>「能 kill 自己的計畫比能寫程式更稀缺」</em>是我的核心優勢。
+      </p>
+
+      <hr class="hiring-rule" />
+
+      <div class="hiring-contact">
+        <a href="mailto:zx2241384@gmail.com">zx2241384@gmail.com</a> &middot; 開放遠端 / 台北
+      </div>
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container-narrow footer-actions">
+      <a href="index.html">&larr; 回 Portfolio</a>
+      <a class="primary" href="mcp-retrospective.html">下一篇：MCP Monitoring Retrospective &rarr;</a>
+    </div>
+  </footer>
+</body>
+</html>

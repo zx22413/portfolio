@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<title>MCP Monitoring: a 14-day audit killed my own plan &mdash; Tsao De-Wei</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #08090a;
+    --bg-elev: #101113;
+    --bg-elev-2: #16181c;
+    --border: #1f2126;
+    --border-strong: #2a2d33;
+    --fg: #f7f8f8;
+    --fg-dim: #c7c9d1;
+    --muted: #8a8f98;
+    --muted-2: #5c6068;
+    --accent: #5e6ad2;
+    --accent-hi: #8b95e8;
+    --accent-soft: rgba(94, 106, 210, 0.14);
+    --accent-glow: rgba(94, 106, 210, 0.32);
+    --success: #4cb782;
+    --warn: #d4a24c;
+    --danger: #d4584c;
+
+    --font-sans: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-serif: "Source Serif 4", "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.005em;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ====== layout ====== */
+  .container {
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+  .container-narrow {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+
+  /* ====== header ====== */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(8, 9, 10, 0.72);
+    border-bottom: 1px solid var(--border);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .brand {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+  .back-link {
+    font-size: 13px;
+    color: var(--muted);
+    transition: color 120ms ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .back-link:hover { color: var(--fg); }
+
+  /* ====== hero ====== */
+  .article-hero {
+    padding: clamp(64px, 11vw, 112px) 0 clamp(40px, 6vw, 64px);
+    border-bottom: 1px solid var(--border);
+  }
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .meta-row .sep {
+    width: 4px; height: 4px;
+    background: var(--muted-2);
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .meta-tag {
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  h1.article-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(34px, 5.6vw, 56px);
+    line-height: 1.04;
+    letter-spacing: -0.028em;
+    margin: 0 0 30px;
+    color: var(--fg);
+    max-width: 22ch;
+  }
+  .article-deck {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(19px, 2.6vw, 24px);
+    line-height: 1.5;
+    color: var(--fg-dim);
+    max-width: 30ch;
+    margin: 0 0 8px;
+  }
+  .article-deck strong {
+    font-style: normal;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--fg);
+  }
+  .article-deck .factor {
+    font-style: normal;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--accent-hi);
+    background: var(--accent-soft);
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-size: 0.92em;
+  }
+
+  /* ====== TLDR box ====== */
+  .tldr {
+    margin: 48px auto 0;
+    max-width: 720px;
+    padding: 24px 28px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+  }
+  .tldr-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .tldr ul {
+    margin: 0; padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tldr li {
+    font-family: var(--font-sans);
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--fg-dim);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .tldr li::before {
+    content: "";
+    flex-shrink: 0;
+    width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-top: 9px;
+  }
+  .tldr li strong { color: var(--fg); font-weight: 500; }
+
+  /* ====== article body ====== */
+  article {
+    padding: clamp(48px, 7vw, 80px) 0 clamp(48px, 8vw, 80px);
+  }
+  .prose {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--fg-dim);
+    max-width: 65ch;
+    margin: 0 auto;
+  }
+  .prose > * + * { margin-top: 1em; }
+  .prose h2 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(22px, 3vw, 28px);
+    letter-spacing: -0.02em;
+    color: var(--fg);
+    margin: 56px 0 18px;
+    line-height: 1.2;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .prose h2 .step-num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    background: var(--accent-soft);
+    padding: 4px 9px;
+    border-radius: 4px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .prose p {
+    margin: 0 0 1.1em;
+  }
+  .prose em {
+    font-style: italic;
+    color: var(--fg);
+  }
+  .prose strong {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--fg);
+    font-style: normal;
+  }
+  .prose code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--accent-hi);
+  }
+
+  /* ====== pieces that break the prose column ====== */
+  .full-bleed {
+    margin: 48px auto;
+    max-width: 980px;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+
+  /* ====== architecture diagram ====== */
+  .arch-block {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(24px, 4vw, 40px) clamp(16px, 3vw, 32px);
+  }
+  .arch-caption {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .arch-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  /* ====== readiness gate ====== */
+  .gate {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+  }
+  @media (min-width: 720px) {
+    .gate { grid-template-columns: 1fr auto 1fr auto 1fr; align-items: stretch; }
+  }
+  .gate-stage {
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .gate-stage[data-status="cold"] { border-color: rgba(138, 143, 152, 0.4); }
+  .gate-stage[data-status="warm"] { border-color: rgba(212, 162, 76, 0.5); background: linear-gradient(180deg, rgba(212, 162, 76, 0.04), transparent); }
+  .gate-stage[data-status="ready"] { border-color: rgba(76, 183, 130, 0.5); background: linear-gradient(180deg, rgba(76, 183, 130, 0.05), transparent); }
+  .gate-stage-name {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .gate-stage[data-status="cold"] .gate-stage-name { color: var(--muted); }
+  .gate-stage[data-status="warm"] .gate-stage-name { color: var(--warn); }
+  .gate-stage[data-status="ready"] .gate-stage-name { color: var(--success); }
+  .gate-stage-window {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+  }
+  .gate-stage-desc {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .gate-arrow {
+    align-self: center;
+    color: var(--muted-2);
+    font-family: var(--font-mono);
+    font-size: 18px;
+  }
+  @media (max-width: 719px) {
+    .gate-arrow { display: none; }
+  }
+
+  /* ====== AUDIT — the wow moment ====== */
+  .audit {
+    background:
+      radial-gradient(120% 90% at 50% 0%, rgba(212, 88, 76, 0.12) 0%, transparent 60%),
+      var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(32px, 5vw, 56px) clamp(24px, 4vw, 48px);
+    overflow: hidden;
+    position: relative;
+  }
+  .audit::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 88, 76, 0.5), transparent);
+  }
+  .audit-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--danger);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .audit-eyebrow::before {
+    content: "";
+    width: 6px; height: 6px;
+    background: var(--danger);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(212, 88, 76, 0.6);
+  }
+  .audit-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(20px, 2.8vw, 26px);
+    letter-spacing: -0.018em;
+    color: var(--fg);
+    margin: 0 0 36px;
+    max-width: 32ch;
+  }
+
+  .audit-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  @media (min-width: 860px) {
+    .audit-grid { grid-template-columns: 1.1fr 1fr; gap: 56px; }
+  }
+
+  /* the giant 0.22% block */
+  .stat-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .stat-hero-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .stat-hero-value {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(80px, 16vw, 156px);
+    line-height: 0.92;
+    letter-spacing: -0.05em;
+    color: var(--accent);
+    background: linear-gradient(180deg, var(--accent-hi) 0%, var(--accent) 70%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+  }
+  .stat-hero-unit {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .stat-hero-detail {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--fg-dim);
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .stat-hero-detail span { color: var(--muted); }
+
+  /* expected vs actual comparison */
+  .compare-list {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .compare-row { display: flex; flex-direction: column; gap: 10px; }
+  .compare-label {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .compare-label .name { color: var(--muted); }
+  .compare-label .value {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: -0.018em;
+    text-transform: none;
+  }
+  .compare-row[data-state="expected"] .value { color: var(--fg); }
+  .compare-row[data-state="actual"] .value { color: var(--danger); }
+  .bar-track {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-hi));
+  }
+  .compare-row[data-state="actual"] .bar-fill {
+    background: linear-gradient(90deg, var(--danger), #e8786c);
+    box-shadow: 0 0 10px rgba(212, 88, 76, 0.4);
+  }
+  .compare-note {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-top: -2px;
+  }
+
+  .gap-callout {
+    margin-top: 30px;
+    padding-top: 22px;
+    border-top: 1px dashed var(--border-strong);
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .gap-callout strong {
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 26px;
+    color: var(--danger);
+    letter-spacing: -0.015em;
+  }
+
+  /* ====== attribution list ====== */
+  .attribution-list {
+    list-style: none;
+    margin: 1.5em 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-family: var(--font-serif);
+  }
+  .attribution-list li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    padding: 16px 18px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    align-items: baseline;
+  }
+  .attribution-list .h-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    background: var(--accent-soft);
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    align-self: start;
+    margin-top: 3px;
+  }
+  .attribution-list .h-body {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--fg-dim);
+  }
+  .attribution-list .h-body strong {
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-weight: 500;
+    color: var(--fg);
+    display: block;
+    margin-bottom: 2px;
+    font-size: 15px;
+  }
+
+  .narrowing {
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-left: 2px solid var(--muted-2);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 15px;
+    color: var(--muted);
+  }
+
+  /* ====== decision callout ====== */
+  .decision {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-top: 1.5em;
+  }
+  .decision-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  @media (min-width: 640px) { .decision-grid { grid-template-columns: repeat(3, 1fr); } }
+  .decision-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .decision-item .verb {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .decision-item[data-kind="kill"] .verb { color: var(--danger); }
+  .decision-item[data-kind="keep"] .verb { color: var(--success); }
+  .decision-item[data-kind="rewrite"] .verb { color: var(--accent); }
+  .decision-item .what {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--fg);
+    letter-spacing: -0.005em;
+  }
+  .decision-item .why {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ====== pull-quote ====== */
+  .pull-quote {
+    margin: 56px auto;
+    max-width: 720px;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+  .pull-quote-inner {
+    position: relative;
+    padding: 32px 36px;
+    background:
+      radial-gradient(80% 100% at 0% 0%, rgba(94, 106, 210, 0.10) 0%, transparent 70%),
+      var(--bg-elev);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-lg);
+  }
+  .pull-quote-mark {
+    position: absolute;
+    top: 6px; left: 18px;
+    font-family: var(--font-serif);
+    font-size: 64px;
+    line-height: 1;
+    color: var(--accent);
+    opacity: 0.4;
+  }
+  .pull-quote blockquote {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(20px, 2.6vw, 24px);
+    line-height: 1.45;
+    color: var(--fg);
+    padding-left: 8px;
+  }
+  .pull-quote blockquote em {
+    font-style: italic;
+    color: var(--accent-hi);
+  }
+
+  /* ====== footer ====== */
+  .article-footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0 56px;
+    margin-top: 24px;
+  }
+  .footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 14px;
+  }
+  .footer-actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    transition: color 120ms ease;
+  }
+  .footer-actions a:hover { color: var(--fg); }
+  .footer-actions a.primary { color: var(--accent); }
+  .footer-actions a.primary:hover { color: var(--accent-hi); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <a href="landing.html" class="brand">
+        <span class="brand-dot"></span>
+        Tsao De-Wei
+      </a>
+      <a href="landing.html" class="back-link">&larr; Portfolio</a>
+    </div>
+  </header>
+
+  <section class="article-hero">
+    <div class="container-narrow">
+      <div class="meta-row">
+        <span class="meta-tag">&#9733; Flagship</span>
+        <span>2026-04-28</span>
+        <span class="sep"></span>
+        <span>8 min read</span>
+        <span class="sep"></span>
+        <span>Retrospective</span>
+      </div>
+      <h1 class="article-title">MCP Monitoring: a 14-day audit killed my own plan.</h1>
+      <p class="article-deck">
+        I assumed instrumentation would cover all Brain traffic. Two weeks later, the data said I was wrong by <span class="factor">~450&times;</span>.
+      </p>
+    </div>
+
+    <div class="container-narrow">
+      <div class="tldr">
+        <div class="tldr-label">TL;DR</div>
+        <ul>
+          <li><strong>Designed</strong> an anomaly-detection pipeline (instrumentation &rarr; store &rarr; detector &rarr; judge &rarr; alerter) to monitor Brain traffic.</li>
+          <li><strong>14-day audit found 0.22% coverage.</strong> Real traffic bypasses the MCP layer where the decorator lives &mdash; expected 30&ndash;60 events/day, got ~4.</li>
+          <li><strong>Killed my own BQML benchmark plan,</strong> kept the cron (cost is zero), rewrote the project as a portfolio retrospective. Verifying assumptions beats defending them.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <article>
+    <div class="prose">
+
+      <h2><span class="step-num">01</span> The hypothesis</h2>
+      <p>
+        The plan was clean on paper. <em>Brain</em> &mdash; my private knowledge system &mdash; speaks MCP. So if I wrap every MCP tool call in a tiny decorator that logs <code>tool_name</code>, <code>args_hash</code>, <code>latency_ms</code>, and <code>status</code> into a SQLite store, I should see the full pulse of the system. From there: a z-score detector for hourly anomalies, a Gemini-based judge to filter false positives, and a Telegram alerter for genuine spikes.
+      </p>
+      <p>
+        The implicit assumption &mdash; the one I never wrote down &mdash; was that <em>MCP is the front door</em>. That if traffic exists, it exists as MCP tool calls. I expected somewhere between <strong>30 and 60 events per day</strong> after the modeling layer warmed up. Enough signal to do real work.
+      </p>
+
+      <h2><span class="step-num">02</span> The build</h2>
+      <p>
+        Five small modules, each with one job. I deployed them to EC2 behind a 15-minute cron. The pipeline:
+      </p>
+    </div>
+
+    <div class="full-bleed">
+      <div class="arch-block">
+        <div class="arch-caption">Pipeline &mdash; 5 modules, one cron</div>
+        <svg class="arch-svg" viewBox="0 0 880 200" xmlns="http://www.w3.org/2000/svg" aria-label="Pipeline diagram">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6068"/>
+            </marker>
+            <linearGradient id="boxGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#16181c"/>
+              <stop offset="100%" stop-color="#101113"/>
+            </linearGradient>
+          </defs>
+
+          <!-- 5 boxes, evenly spaced -->
+          <g font-family="Inter Tight, system-ui" font-size="13" fill="#f7f8f8">
+            <g transform="translate(20,70)">
+              <rect width="140" height="60" rx="8" fill="url(#boxGrad)" stroke="#2a2d33"/>
+              <text x="70" y="28" text-anchor="middle" font-weight="600">instrumentation</text>
+              <text x="70" y="46" text-anchor="middle" font-size="10.5" fill="#8a8f98" font-family="JetBrains Mono">decorator</text>
+            </g>
+            <g transform="translate(195,70)">
+              <rect width="140" height="60" rx="8" fill="url(#boxGrad)" stroke="#2a2d33"/>
+              <text x="70" y="28" text-anchor="middle" font-weight="600">store</text>
+              <text x="70" y="46" text-anchor="middle" font-size="10.5" fill="#8a8f98" font-family="JetBrains Mono">SQLite</text>
+            </g>
+            <g transform="translate(370,70)">
+              <rect width="140" height="60" rx="8" fill="url(#boxGrad)" stroke="#2a2d33"/>
+              <text x="70" y="28" text-anchor="middle" font-weight="600">detector</text>
+              <text x="70" y="46" text-anchor="middle" font-size="10.5" fill="#8a8f98" font-family="JetBrains Mono">z-score</text>
+            </g>
+            <g transform="translate(545,70)">
+              <rect width="140" height="60" rx="8" fill="url(#boxGrad)" stroke="#5e6ad2"/>
+              <text x="70" y="28" text-anchor="middle" font-weight="600">judge</text>
+              <text x="70" y="46" text-anchor="middle" font-size="10.5" fill="#5e6ad2" font-family="JetBrains Mono">Gemini</text>
+            </g>
+            <g transform="translate(720,70)">
+              <rect width="140" height="60" rx="8" fill="url(#boxGrad)" stroke="#2a2d33"/>
+              <text x="70" y="28" text-anchor="middle" font-weight="600">alerter</text>
+              <text x="70" y="46" text-anchor="middle" font-size="10.5" fill="#8a8f98" font-family="JetBrains Mono">Telegram</text>
+            </g>
+          </g>
+
+          <!-- arrows -->
+          <g stroke="#5c6068" stroke-width="1.5" fill="none" marker-end="url(#arrow)">
+            <line x1="160" y1="100" x2="195" y2="100"/>
+            <line x1="335" y1="100" x2="370" y2="100"/>
+            <line x1="510" y1="100" x2="545" y2="100"/>
+            <line x1="685" y1="100" x2="720" y2="100"/>
+          </g>
+
+          <!-- bottom labels: hourly cron -->
+          <g font-family="JetBrains Mono" font-size="10.5" fill="#8a8f98" letter-spacing="1">
+            <text x="440" y="170" text-anchor="middle">CRON  15 * * * *  &mdash;  python -m src.monitoring.hourly</text>
+          </g>
+          <line x1="90" y1="155" x2="790" y2="155" stroke="#1f2126" stroke-dasharray="3,3"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        End-to-end latency was ~33ms per record. Health was easy to read: cron last-run timestamp, row count, judge call success rate. Everything green.
+      </p>
+
+      <h2><span class="step-num">03</span> The deploy</h2>
+      <p>
+        Anomaly detection is statistically meaningless on a cold pipeline &mdash; small samples produce wild z-scores. So I gated readiness in three explicit stages, each with different behavior:
+      </p>
+    </div>
+
+    <div class="full-bleed">
+      <div class="gate">
+        <div class="gate-stage" data-status="cold">
+          <span class="gate-stage-name">Cold start</span>
+          <span class="gate-stage-window">&lt; 7 days</span>
+          <span class="gate-stage-desc">Skip detection entirely. Just collect.</span>
+        </div>
+        <span class="gate-arrow">&rarr;</span>
+        <div class="gate-stage" data-status="warm">
+          <span class="gate-stage-name">Warming</span>
+          <span class="gate-stage-window">7&ndash;14 days</span>
+          <span class="gate-stage-desc">Run detection, label outputs &ldquo;tentative.&rdquo; No alerts.</span>
+        </div>
+        <span class="gate-arrow">&rarr;</span>
+        <div class="gate-stage" data-status="ready">
+          <span class="gate-stage-name">Ready</span>
+          <span class="gate-stage-window">&ge; 14 days</span>
+          <span class="gate-stage-desc">Full pipeline. Alerts go live.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        Day 14 came. Pipeline transitioned to <code>READY</code>. Cron kept firing every quarter-hour. Health checks all green. So I did what I should have done on day one and nobody &mdash; including past me &mdash; thought to do: I asked the obvious question.
+      </p>
+      <p style="text-align: center; font-family: var(--font-serif); font-style: italic; color: var(--muted); font-size: 17px; margin: 28px 0;">
+        Is the data we&rsquo;re collecting <em>actually</em> the data we said we&rsquo;d collect?
+      </p>
+
+      <h2><span class="step-num">04</span> The audit</h2>
+      <p>
+        I counted file changes inside the Brain vault over the same window the monitoring system was watching, then compared it to what the monitoring DB had captured.
+      </p>
+    </div>
+
+    <div class="full-bleed">
+      <div class="audit">
+        <div class="audit-eyebrow">Coverage audit &mdash; 14-day window</div>
+        <h3 class="audit-title">What the monitor saw vs. what actually happened.</h3>
+
+        <div class="audit-grid">
+          <div class="stat-hero">
+            <div class="stat-hero-label">Coverage</div>
+            <p class="stat-hero-value">0.22%</p>
+            <div class="stat-hero-unit">of real Brain traffic was being instrumented.</div>
+            <div class="stat-hero-detail">
+              <span>2 events captured</span> &nbsp;/&nbsp; <span>897 file changes observed</span>
+            </div>
+          </div>
+
+          <div class="compare-list">
+            <div class="compare-row" data-state="expected">
+              <div class="compare-label">
+                <span class="name">Expected daily events</span>
+                <span class="value">30&ndash;60</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill" style="width: 100%;"></div></div>
+              <div class="compare-note">Based on observed Brain activity post-pipeline-fix.</div>
+            </div>
+
+            <div class="compare-row" data-state="actual">
+              <div class="compare-label">
+                <span class="name">Actual daily events</span>
+                <span class="value">~4</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill" style="width: 8%;"></div></div>
+              <div class="compare-note">21&ndash;29 events across 9 days. An order of magnitude short.</div>
+            </div>
+
+            <div class="gap-callout">
+              <strong>~450&times;</strong>
+              <span>shortfall between the universe the monitor could see and the universe Brain actually inhabits.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        The pipeline was running. The pipeline was healthy. The pipeline was watching almost nothing.
+      </p>
+      <p>
+        99.78% of Brain&rsquo;s real traffic doesn&rsquo;t enter through MCP at all. It enters through the Telegram bot or through internal REST handlers that call core functions <em>directly</em> &mdash; bypassing the decorator layer where my instrumentation lives. The MCP front door is just one of three doors, and apparently the least-used one.
+      </p>
+
+      <h2><span class="step-num">05</span> The attribution</h2>
+      <p>
+        Once the gap was visible, the next question was <em>where</em> exactly the leak sits. I have three live hypotheses; the root cause isn&rsquo;t fully nailed down yet.
+      </p>
+      <ul class="attribution-list">
+        <li>
+          <span class="h-num">H1</span>
+          <span class="h-body">
+            <strong>Decorator not active on the running process.</strong>
+            The instrumentation wraps an MCP-layer entry point. If the runtime imports the un-wrapped module first &mdash; Python import order is fragile &mdash; the decorator silently doesn&rsquo;t apply. No error. No log line.
+          </span>
+        </li>
+        <li>
+          <span class="h-num">H2</span>
+          <span class="h-body">
+            <strong>GHA deploy didn&rsquo;t reload the long-running service.</strong>
+            CI ships new code, but the systemd unit on EC2 wasn&rsquo;t restarted. New decorator code on disk, old process in memory. This bites until the next reboot.
+          </span>
+        </li>
+        <li>
+          <span class="h-num">H3</span>
+          <span class="h-body">
+            <strong>MCP traffic is genuinely low.</strong>
+            Most Brain interaction goes through TG bot and REST. MCP is reserved for Claude Code sessions &mdash; rarer than I assumed. In which case &ldquo;the monitor is fine, it&rsquo;s just watching the quiet door.&rdquo;
+          </span>
+        </li>
+      </ul>
+      <div class="narrowing">
+        Narrowing this is straightforward &mdash; tail the systemd logs, ship a debug trace, recount &mdash; and worth a few hours. <em>Not</em> worth weeks of rebuilding the pipeline before knowing which of the three it is.
+      </div>
+
+      <h2><span class="step-num">06</span> The decision</h2>
+      <p>
+        My original next step was a BQML TimesFM benchmark on the captured data &mdash; comparing zero-shot foundation models against my z-score baseline. With ~4 events/day the comparison is statistically meaningless. So I made three calls in the same hour:
+      </p>
+      <div class="decision">
+        <div class="decision-grid">
+          <div class="decision-item" data-kind="kill">
+            <span class="verb">&times; Kill</span>
+            <span class="what">BQML benchmark plan</span>
+            <span class="why">Sample size won&rsquo;t support the comparison. No amount of model sophistication fixes that.</span>
+          </div>
+          <div class="decision-item" data-kind="keep">
+            <span class="verb">&#10003; Keep</span>
+            <span class="what">The cron, untouched</span>
+            <span class="why">Cost is effectively zero. Useful as a baseline if I fix instrumentation later.</span>
+          </div>
+          <div class="decision-item" data-kind="rewrite">
+            <span class="verb">&rarr; Rewrite</span>
+            <span class="what">Project framing</span>
+            <span class="why">From &ldquo;monitoring system that worked&rdquo; to &ldquo;monitoring system that taught me something.&rdquo;</span>
+          </div>
+        </div>
+      </div>
+
+      <h2><span class="step-num">07</span> What I learned</h2>
+      <p>
+        Everything I built worked. The decorator runs in 33ms. The detector computes. The judge replies. The alerter delivers. Nothing in the pipeline is broken.
+      </p>
+      <p>
+        And it didn&rsquo;t matter, because the assumption underneath was wrong, and nothing in my health checks would <em>ever</em> have told me. Health says &ldquo;the machine is on.&rdquo; Coverage says &ldquo;the machine is pointed at the right thing.&rdquo;
+      </p>
+    </div>
+
+    <div class="pull-quote">
+      <div class="pull-quote-inner">
+        <span class="pull-quote-mark">&ldquo;</span>
+        <blockquote>
+          Auto systems must run a 14-day coverage audit, not just health checks. <em>&lsquo;It&rsquo;s running&rsquo; &ne; &lsquo;it&rsquo;s working.&rsquo;</em>
+        </blockquote>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        The hardest move on a working system isn&rsquo;t adding more &mdash; it&rsquo;s asking whether what&rsquo;s already there is pointed at reality. I now treat that as a hard 14-day deliverable on every automation I ship, alongside the build itself: a number, a verification date, and the willingness to kill the project if the number disagrees.
+      </p>
+      <p>
+        That last part is the only part that&rsquo;s actually hard.
+      </p>
+    </div>
+  </article>
+
+  <footer class="article-footer">
+    <div class="container-narrow footer-actions">
+      <a href="landing.html">&larr; Back to portfolio</a>
+      <a class="primary" href="https://github.com/zx22413" target="_blank" rel="noopener">Discuss this on GitHub &#x2197;</a>
+    </div>
+  </footer>
+</body>
+</html>

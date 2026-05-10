@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<title>Tsao De-Wei — Production AI systems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400;1,8..60,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #08090a;
+    --bg-elev: #101113;
+    --bg-elev-2: #16181c;
+    --border: #1f2126;
+    --border-strong: #2a2d33;
+    --fg: #f7f8f8;
+    --fg-dim: #c7c9d1;
+    --muted: #8a8f98;
+    --muted-2: #5c6068;
+    --accent: #5e6ad2;
+    --accent-soft: rgba(94, 106, 210, 0.14);
+    --accent-glow: rgba(94, 106, 210, 0.32);
+    --success: #4cb782;
+    --warn: #d4a24c;
+    --danger: #d4584c;
+
+    --font-sans: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-serif: "Source Serif 4", "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 14px;
+
+    --shadow-sm: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.005em;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ====== layout ====== */
+  .container {
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+
+  /* ====== header ====== */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(8, 9, 10, 0.72);
+    border-bottom: 1px solid var(--border);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .brand {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+  nav ul {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    margin: 0; padding: 0;
+  }
+  nav a {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 13px;
+    color: var(--muted);
+    border-radius: var(--radius-sm);
+    transition: color 120ms ease, background 120ms ease;
+  }
+  nav a:hover { color: var(--fg); background: var(--bg-elev); }
+
+  /* ====== hero ====== */
+  .hero {
+    padding: clamp(64px, 12vw, 128px) 0 clamp(48px, 8vw, 80px);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 11px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    margin-bottom: 24px;
+  }
+  .hero-eyebrow .pulse {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 8px rgba(76, 183, 130, 0.6);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  h1.headline {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(32px, 5.6vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin: 0 0 28px;
+    max-width: 18ch;
+    color: var(--fg);
+  }
+  h1.headline em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .subhead {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(17px, 2.2vw, 21px);
+    line-height: 1.55;
+    color: var(--fg-dim);
+    max-width: 60ch;
+    margin: 0 0 40px;
+    font-weight: 400;
+  }
+  .subhead strong {
+    font-weight: 500;
+    color: var(--fg);
+    font-style: normal;
+    font-family: var(--font-sans);
+  }
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 38px;
+    padding: 0 16px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease;
+    letter-spacing: -0.005em;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12) inset, 0 4px 14px rgba(94, 106, 210, 0.3);
+  }
+  .btn-primary:hover { background: #6c78dc; }
+  .btn-secondary {
+    background: var(--bg-elev);
+    color: var(--fg);
+    border-color: var(--border-strong);
+  }
+  .btn-secondary:hover { background: var(--bg-elev-2); border-color: #3a3d44; }
+  .btn .arrow { transition: transform 160ms ease; }
+  .btn:hover .arrow { transform: translateX(2px); }
+
+  /* ====== section ====== */
+  .section {
+    padding: clamp(48px, 8vw, 88px) 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    gap: 24px;
+  }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .section-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(20px, 3vw, 26px);
+    letter-spacing: -0.018em;
+    margin: 6px 0 0;
+    color: var(--fg);
+  }
+
+  /* ====== project grid ====== */
+  .grid-projects {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
+  }
+  .card {
+    grid-column: span 12;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 220px;
+  }
+  .card:hover {
+    border-color: var(--border-strong);
+    background: var(--bg-elev-2);
+  }
+
+  @media (min-width: 760px) {
+    .card { grid-column: span 6; }
+    .card-flagship { grid-column: span 12; }
+  }
+  @media (min-width: 1024px) {
+    .card { grid-column: span 4; }
+    .card-flagship {
+      grid-column: span 12;
+      min-height: 260px;
+    }
+  }
+
+  .card-flagship {
+    background:
+      radial-gradient(120% 80% at 0% 0%, rgba(94, 106, 210, 0.12) 0%, transparent 60%),
+      var(--bg-elev);
+    border-color: rgba(94, 106, 210, 0.35);
+  }
+  .card-flagship:hover { border-color: rgba(94, 106, 210, 0.6); }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .card-index {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted-2);
+    letter-spacing: 0.04em;
+  }
+  .card-flag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .card-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -0.015em;
+    color: var(--fg);
+    margin: 0;
+  }
+  .card-flagship .card-title { font-size: 24px; }
+  .card-desc {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--fg-dim);
+    margin: 0;
+    max-width: 50ch;
+  }
+  .card-flagship .card-desc { font-size: 17px; }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--muted);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+  }
+  .card-cta {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    margin-top: 4px;
+  }
+  .card:hover .card-cta .arrow { transform: translateX(3px); }
+  .card-cta .arrow { transition: transform 160ms ease; }
+
+  /* ====== currently building ====== */
+  .building {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 22px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-top: 32px;
+  }
+  .building-icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+  .building-text {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .building-text strong {
+    color: var(--fg);
+    font-weight: 500;
+  }
+  .building-text em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--fg-dim);
+  }
+  .phase-pill {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--warn);
+    background: rgba(212, 162, 76, 0.1);
+    border: 1px solid rgba(212, 162, 76, 0.25);
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ====== footer ====== */
+  footer {
+    padding: 40px 0 56px;
+  }
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .footer-links { display: flex; gap: 18px; flex-wrap: wrap; }
+  .footer-links a { color: var(--fg-dim); transition: color 120ms ease; }
+  .footer-links a:hover { color: var(--fg); }
+  .footer-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.02em;
+  }
+  .footer-status .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 6px rgba(76, 183, 130, 0.6);
+  }
+
+  @media (max-width: 600px) {
+    .section-header { flex-direction: column; gap: 4px; }
+    .footer-inner { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <a href="#" class="brand">
+        <span class="brand-dot"></span>
+        Tsao De-Wei
+      </a>
+      <nav>
+        <ul>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <span class="hero-eyebrow">
+          <span class="pulse"></span>
+          Brain &mdash; 14 months uptime
+        </span>
+        <h1 class="headline">Production AI systems, shipped from a non-engineering background.</h1>
+        <p class="subhead">
+          I drive software through agentic engineering. <strong>Brain</strong> &mdash; my private knowledge system &mdash; has run 24/7 for 14 months. Below: what I extracted from it.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="mcp-retrospective.html">
+            View flagship case study <span class="arrow">&rarr;</span>
+          </a>
+          <a class="btn btn-secondary" href="https://github.com/zx22413" target="_blank" rel="noopener">
+            GitHub <span class="arrow">&#x2197;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <div class="section-label">01 &mdash; Selected work</div>
+            <h2 class="section-title">Three projects that show how I think</h2>
+          </div>
+        </div>
+
+        <div class="grid-projects">
+          <article class="card card-flagship">
+            <div class="card-meta">
+              <span class="card-index">02 / Flagship</span>
+              <span class="card-flag">&#9733; Read this first</span>
+            </div>
+            <h3 class="card-title">MCP Monitoring Retrospective</h3>
+            <p class="card-desc">Assumed. Deployed. Audited. Killed. A 14-day coverage audit revealed my instrumentation caught 0.22% of traffic &mdash; so I killed my own benchmark plan and wrote up why.</p>
+            <div class="tags">
+              <span class="tag">System design</span>
+              <span class="tag">Eval</span>
+              <span class="tag">Judgment</span>
+              <span class="tag">Retrospective</span>
+            </div>
+            <a class="card-cta" href="mcp-retrospective.html">
+              Read the audit <span class="arrow">&rarr;</span>
+            </a>
+          </article>
+
+          <article class="card">
+            <div class="card-meta">
+              <span class="card-index">01 / Production</span>
+            </div>
+            <h3 class="card-title">Brain</h3>
+            <p class="card-desc">A production knowledge system. MCP server + Telegram bot + hybrid search (FTS5 &times; vector). Forgetting via heat decay. Three-tier storage. 14 months continuous uptime.</p>
+            <div class="tags">
+              <span class="tag">MCP</span>
+              <span class="tag">FTS5</span>
+              <span class="tag">RAG</span>
+              <span class="tag">14mo uptime</span>
+            </div>
+            <span class="card-cta">Architecture write-up <span class="arrow">&rarr;</span></span>
+          </article>
+
+          <article class="card">
+            <div class="card-meta">
+              <span class="card-index">03 / Open source</span>
+            </div>
+            <h3 class="card-title">OSS extracts (5 modules)</h3>
+            <p class="card-desc">Battle-tested layers pulled out of Brain. Each shipped as its own repo with paranoia .gitignore, CI on day one, and a runnable example.</p>
+            <div class="tags">
+              <span class="tag">forget-rag</span>
+              <span class="tag">mcp-fts5-starter</span>
+              <span class="tag">smart-restart</span>
+              <span class="tag">+2</span>
+            </div>
+            <span class="card-cta">Browse repos <span class="arrow">&rarr;</span></span>
+          </article>
+        </div>
+
+        <div class="building">
+          <span class="building-icon">&#128049;</span>
+          <span class="building-text">
+            <strong>Currently building:</strong> <em>Bibo &mdash; companion AI assistant</em>
+          </span>
+          <span class="phase-pill">Phase 1</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-links">
+        <a href="mailto:zx2241384@gmail.com">zx2241384@gmail.com</a>
+        <a href="https://github.com/zx22413" target="_blank" rel="noopener">GitHub &#x2197;</a>
+      </div>
+      <div class="footer-status">
+        <span class="dot"></span>
+        Open to remote &middot; Taipei
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
