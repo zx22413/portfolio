@@ -636,18 +636,18 @@
         <span class="meta-tag">Production</span>
         <span>2 個月運作</span>
         <span class="sep"></span>
-        <span>Architecture</span>
+        <span>架構</span>
       </div>
       <h1 class="article-title">Brain &mdash; 跑了 2 個月的私人知識系統。</h1>
       <p class="article-deck">
-        為自己蓋的 <strong>AI infrastructure</strong>，從 daily-driven 中學設計。
+        為自己蓋的 <strong>AI 基礎建設</strong>，從天天在用的過程中學設計。
       </p>
 
       <div class="stats-strip">
         <div class="stat-cell"><span class="v">2 個月</span><span class="l">運作</span></div>
-        <div class="stat-cell"><span class="v">24/7</span><span class="l">on production</span></div>
-        <div class="stat-cell"><span class="v">daily</span><span class="l">driven</span></div>
-        <div class="stat-cell"><span class="v">5</span><span class="l">OSS extracts</span></div>
+        <div class="stat-cell"><span class="v">24/7</span><span class="l">全天候運作</span></div>
+        <div class="stat-cell"><span class="v">天天</span><span class="l">在用</span></div>
+        <div class="stat-cell"><span class="v">5</span><span class="l">OSS 拆解模組</span></div>
       </div>
     </div>
 
@@ -657,8 +657,8 @@
         <ul>
           <li><strong>入口</strong>：Telegram Bot / REST API / MCP server。</li>
           <li><strong>核心</strong>：SQLite + FTS5 + 向量混合搜尋 + 熱度衰減記憶層。</li>
-          <li><strong>部署</strong>：CF Workers + EC2 + GitHub Actions，全 production。</li>
-          <li><strong>產出</strong>：從 Brain 抽出 <code>5 個</code> 獨立 OSS modules（forget-rag、mcp-fts5-starter 等）。</li>
+          <li><strong>部署</strong>：CF Workers + EC2 + GitHub Actions，全部上線運作。</li>
+          <li><strong>產出</strong>：從 Brain 抽出 <code>5 個</code> 獨立 OSS 模組（forget-rag、mcp-fts5-starter 等）。</li>
         </ul>
       </div>
     </div>
@@ -668,7 +668,7 @@
     <div class="prose">
       <h2><span class="step-num">01</span> 系統架構</h2>
       <p>
-        Brain 不是 demo，是我每天用的東西。為了維持 daily-driven，它必須做到三件事：<em>多入口</em>（手機、桌機、Claude Code session 都能進）、<em>單一真相</em>（vault + SQLite 是 source of truth，其他都是 view）、以及<em>不會壞</em>（cron + GitHub Actions 是 backbone，real-time push 是奢侈品）。
+        Brain 不是 demo，是我每天在用的東西。要讓它天天在跑，必須做到三件事：<em>多入口</em>（手機、桌機、Claude Code session 都進得來）、<em>單一真相</em>（vault + SQLite 是唯一真相來源，其他都是衍生視圖）、以及<em>不會壞</em>（cron + GitHub Actions 是骨幹，real-time push 是奢侈品）。
       </p>
     </div>
 
@@ -771,12 +771,12 @@
 
     <div class="prose">
       <p>
-        三個入口都直連 core layer，不經過彼此。<em>這是設計選擇，不是巧合</em>——任何一個入口掛了，其他兩個還能用。Daily-driven 的 system 最怕單點失敗，因為單點失敗會逼你開電腦修，而開電腦修這件事本身就是 daily-driven 的反義詞。
+        三個入口都直連核心層，不經過彼此。<em>這是設計選擇，不是巧合</em>——任何一個入口掛了，其他兩個還能用。天天在跑的系統最怕單點失敗，因為單點失敗會逼你開電腦修，而開電腦修這件事本身就是「天天在跑」的反義詞。
       </p>
 
       <h2><span class="step-num">02</span> 5 個關鍵設計選擇</h2>
       <p>
-        這 5 個選擇是 Brain 跟「另一個 RAG demo」差最多的地方。每一個都是 trade-off，每一個都在 2 個月的 daily-driven 中真的被驗證過。
+        這 5 個選擇是 Brain 跟「另一個 RAG demo」差最多的地方。每一個都是取捨，每一個都在 2 個月的天天運作中真的被驗證過。
       </p>
     </div>
 
@@ -785,9 +785,9 @@
 
         <div class="choice">
           <span class="choice-num">Choice 01</span>
-          <h3 class="choice-q">為什麼 <em>SQLite + FTS5</em> 而非 vector DB？</h3>
+          <h3 class="choice-q">為什麼 <em>SQLite + FTS5</em> 而非向量資料庫？</h3>
           <p class="choice-body">
-            啟動 cost 低、樹莓派跑得動、不用 <code>docker compose</code> 起 4 個 service。<strong>FTS5 解 80% 搜尋場景</strong>。剩下 20% 才接 Gemini embeddings 做 hybrid。決策原則：<em>start with the simplest thing that works</em>。如果有一天 SQLite 撐不住了，那是個好問題——但還沒到那一天。
+            啟動成本低、樹莓派跑得動、不用 <code>docker compose</code> 起 4 個服務。<strong>FTS5 解 80% 的搜尋場景</strong>。剩下 20% 才接 Gemini embeddings 做混合搜尋。決策原則：<em>「先從跑得動的最簡單方案開始」</em>。如果有一天 SQLite 撐不住了，那是個好問題——但還沒到那一天。
           </p>
         </div>
 
@@ -795,7 +795,7 @@
           <span class="choice-num">Choice 02</span>
           <h3 class="choice-q">為什麼 <em>熱度衰減 + 三層儲存</em> 而非無限保留？</h3>
           <p class="choice-body">
-            Brain 跑 2 個月，舊筆記變 noise。RAG 撈到 2024 年的舊草稿打斷正在做的事。<strong>L1（熱）/ L2（溫）/ L3（歸檔）不刪除舊資料</strong>，只是讓 RAG 預設只看 L1+L2。能不能搜到 L3 是用戶顯式選擇。Production knowledge system 的合理 default 是<em>「最近的最重要」</em>，不是「全部都重要」。這個 module 後來抽出來變成 <code>forget-rag</code>。
+            Brain 跑 2 個月，舊筆記變雜訊。RAG 撈到 2024 年的舊草稿打斷正在做的事。<strong>L1（熱）/ L2（溫）/ L3（歸檔）不刪除舊資料</strong>，只是讓 RAG 預設只看 L1+L2。能不能搜到 L3 由使用者明確指定。上線中的知識系統，合理的預設是<em>「最近的最重要」</em>，不是「全部都重要」。這個模組後來抽出來變成 <code>forget-rag</code>。
           </p>
         </div>
 
@@ -803,26 +803,26 @@
           <span class="choice-num">Choice 03</span>
           <h3 class="choice-q">為什麼 <em>TG Bot</em> 是主入口而非 Web UI？</h3>
           <p class="choice-body">
-            我在哪、Bot 在哪。手機上、辦公室、家裡——同一個 chat。Web UI 要設計 UX、處理 session、做 auth；Bot <strong>直接用 Telegram 的 infra</strong>，省 90% 工。trade-off 是一次只能服務我一個人——但 Brain 本來就是<em>私人系統</em>。當需求是 daily-driven 的個人 productivity，從工程量回推入口設計才對。
+            我在哪、Bot 在哪。手機上、辦公室、家裡——同一個對話視窗。Web UI 要設計 UX、處理 session、做認證；Bot <strong>直接用 Telegram 的基礎建設</strong>，省 90% 工。代價是一次只能服務我一個人——但 Brain 本來就是<em>私人系統</em>。當需求是天天在用的個人生產力工具，從工程量回推入口設計才對。
           </p>
         </div>
 
         <div class="choice">
           <span class="choice-num">Choice 04</span>
-          <h3 class="choice-q">為什麼 <em>daily-driven cron</em> 而非 real-time push？</h3>
+          <h3 class="choice-q">為什麼 <em>cron 排程</em> 而非 real-time push？</h3>
           <p class="choice-body">
-            日報 / 週報 / 維護任務全是 cron。實時 push 要處理 backpressure / retry / dead letter queue，<strong>cron 只要 retry-on-fail 就好</strong>。錯誤面積差一個數量級。trade-off 是 latency——但個人知識系統不需要 sub-second，<em>需要的是不會壞</em>。Brain 上線 2 個月，cron 任務的恢復成本接近零；real-time push 一壞就要花一整個下午查 queue。
+            日報 / 週報 / 維護任務全是 cron。即時推送要處理 backpressure / retry / dead letter queue，<strong>cron 只要失敗重試就好</strong>。出錯面積差一個數量級。代價是延遲——但個人知識系統不需要毫秒級回應，<em>需要的是不會壞</em>。Brain 上線 2 個月，cron 任務的恢復成本接近零；real-time push 一壞就要花一整個下午查佇列。
           </p>
         </div>
 
         <div class="choice">
           <span class="choice-num">Choice 05</span>
-          <h3 class="choice-q">為什麼 ship MCP 監控但 <em>14 天後砍計畫</em>？</h3>
+          <h3 class="choice-q">為什麼上線 MCP 監控但 <em>14 天後砍計畫</em>？</h3>
           <p class="choice-body">
-            Phase 0 上線後 audit 發現 instrumentation 只抓到 <strong>0.22% 流量</strong>。沒救了——剩下 99.78% 走 Bot/REST 直呼核心，根本不過 MCP。當下我有兩個選擇：花一個月修 instrumentation 架構，或承認假設錯、砍掉 Phase 1 的 BQML benchmark 計畫，把這次經驗寫成 retrospective。<em>我選後者</em>。Sunk cost 是最危險的 anti-pattern，14 天後的 audit 就是設計來破除它的。
+            Phase 0 上線後稽核發現監控只抓到 <strong>0.22% 流量</strong>。沒救了——剩下 99.78% 走 Bot/REST 直呼核心，根本不過 MCP。當下我有兩個選擇：花一個月修監控架構，或承認假設錯、砍掉 Phase 1 的 BQML benchmark 計畫，把這次經驗寫成回顧文。<em>我選後者</em>。沉沒成本是最危險的反模式，14 天後的稽核就是設計來破除它的。
           </p>
           <a class="choice-link" href="mcp-retrospective.html">
-            完整故事看 MCP Monitoring Retrospective <span class="arrow">&rarr;</span>
+            完整故事看 MCP 監控回顧 <span class="arrow">&rarr;</span>
           </a>
         </div>
 
@@ -832,28 +832,28 @@
     <div class="prose">
       <h2><span class="step-num">03</span> 這個系統證明我能在 AI 新創做什麼</h2>
       <p>
-        Portfolio 不是「給你看程式碼有多漂亮」，是<em>把抽象能力翻譯成可驗證的 claim</em>。Brain 跑了 2 個月，下面三條是它證明的東西——每一條都有 evidence，不是 buzzword：
+        Portfolio 不是「給你看程式碼有多漂亮」，是<em>把抽象能力翻譯成可驗證的主張</em>。Brain 跑了 2 個月，下面三條是它證明的東西——每一條都有證據，不是行銷話術：
       </p>
       <div class="claims">
         <div class="claim">
-          <span class="claim-num">Claim 01</span>
+          <span class="claim-num">主張 01</span>
           <span class="claim-body">
-            <strong>設計 production 級 AI infrastructure。</strong>
-            <em>2 個月真的在跑，不是 demo。</em>多入口、單一真相、cron-as-backbone，從頭自己設計、自己 ship、自己 maintain。
+            <strong>設計上線級的 AI 基礎建設。</strong>
+            <em>2 個月真的在跑，不是 demo。</em>多入口、單一真相、cron 撐骨幹，從頭自己設計、自己上線、自己維護。
           </span>
         </div>
         <div class="claim">
-          <span class="claim-num">Claim 02</span>
+          <span class="claim-num">主張 02</span>
           <span class="claim-body">
-            <strong>在 cost / complexity 之間權衡。</strong>
-            <em>SQLite 不是 sexy 的選擇，但是對的選擇。</em>Vector DB / Kubernetes / 微服務都是「之後再說」的奢侈品；個人系統的對的 default 是<code>start small</code>。
+            <strong>在成本與複雜度之間取捨。</strong>
+            <em>SQLite 不是漂亮的選擇，但是對的選擇。</em>向量資料庫 / Kubernetes / 微服務都是「之後再說」的奢侈品；個人系統的合理預設是<code>從最小開始</code>。
           </span>
         </div>
         <div class="claim">
-          <span class="claim-num">Claim 03</span>
+          <span class="claim-num">主張 03</span>
           <span class="claim-body">
-            <strong>Ship 後願意 audit 自己。</strong>
-            <em>MCP 監控的 retrospective 是 evidence。</em>14 天後跑 coverage audit、發現假設錯、砍掉自己的計畫——能 kill 自己的計畫比能寫程式更稀缺。
+            <strong>上線後願意稽核自己。</strong>
+            <em>MCP 監控的回顧文就是證據。</em>14 天後跑覆蓋率稽核、發現假設錯、砍掉自己的計畫——能砍掉自己的計畫比能寫程式更稀缺。
           </span>
         </div>
       </div>
@@ -866,20 +866,20 @@
 
       <p class="hiring-hook">
         你的 AI 新創需要的不是另一個寫 demo 的人，<br />
-        是一個會把 demo 推進 production、再 audit 自己的人。
+        是一個會把 demo 推進上線、再稽核自己的人。
       </p>
 
       <p class="hiring-body">
-        Brain 跑了 <strong>2 個月</strong>。多入口、混合搜尋、熱度衰減、cron-as-backbone，全自己設計自己 ship。它不是在 GitHub 上躺著的 starter repo——是我每天在用的 daily-driven 系統。
+        Brain 跑了 <strong>2 個月</strong>。多入口、混合搜尋、熱度衰減、cron 撐骨幹，全自己設計自己上線。它不是在 GitHub 上躺著的 starter repo——是我每天都在用的系統。
       </p>
 
       <div class="hiring-pull">
-        <em>「程式在跑」&ne;「系統有效」</em>是我學到最關鍵的洞察。如果你的 AI 新創需要一個會設計 production AI infra、會在 cost 和 complexity 之間做選擇、會 audit 自己的 Solution Architect——我們可以聊聊。
+        <em>「程式在跑」&ne;「系統有效」</em>是我學到最關鍵的洞察。如果你的 AI 新創需要一個會設計上線級 AI 基礎建設、會在成本和複雜度之間取捨、會稽核自己的 Solution Architect——我們可以聊聊。
       </div>
 
       <p class="hiring-close">
         我不寫 ML model，也不號稱資深架構師。<br />
-        <em>「能 kill 自己的計畫比能寫程式更稀缺」</em>是我的核心優勢。
+        <em>「能砍掉自己的計畫比能寫程式更稀缺」</em>是我的核心優勢。
       </p>
 
       <hr class="hiring-rule" />

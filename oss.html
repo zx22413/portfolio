@@ -461,15 +461,15 @@
       <div class="container-narrow">
         <div class="meta-row">
           <span class="meta-tag">OSS</span>
-          <span>5 modules</span>
+          <span>5 個模組</span>
           <span class="sep"></span>
-          <span>~1500 LOC total</span>
+          <span>總計 ~1500 行</span>
           <span class="sep"></span>
           <span>MIT</span>
         </div>
-        <h1 class="page-title">OSS Extracts &mdash; 從 Brain 抽出來的 <em>5</em> 個 modules</h1>
+        <h1 class="page-title">OSS 拆解 &mdash; 從 Brain 抽出來的 <em>5</em> 個模組</h1>
         <p class="subhead">
-          每一個都源自 <strong>production 痛點</strong>。在 Brain 內實戰驗證後，獨立釋出。
+          每一個都源自 <strong>線上實際痛點</strong>。在 Brain 內實戰驗證後，獨立釋出。
         </p>
       </div>
     </section>
@@ -498,7 +498,7 @@
             <g transform="translate(330, 30)">
               <rect width="220" height="92" rx="10" fill="url(#brainGrad)" stroke="#5e6ad2" stroke-width="1.5"/>
               <text x="110" y="32" text-anchor="middle" font-family="Inter Tight, system-ui" font-size="17" font-weight="600" fill="#f7f8f8">Brain</text>
-              <text x="110" y="54" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#8b95e8">production knowledge system</text>
+              <text x="110" y="54" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#8b95e8">上線中的私人知識系統</text>
               <text x="110" y="74" text-anchor="middle" font-family="JetBrains Mono" font-size="10.5" fill="#8a8f98">2 個月實戰運作</text>
             </g>
 
@@ -559,30 +559,30 @@
             <!-- Bottom annotation -->
             <line x1="60" y1="305" x2="820" y2="305" stroke="#1f2126" stroke-dasharray="3,3"/>
             <g font-family="Source Serif 4, serif" font-size="13" font-style="italic" fill="#8a8f98">
-              <text x="295" y="335" text-anchor="middle">&larr; 從 Brain 抽出來的 4 個 modules &mdash; 同 production 痛點 &rarr;</text>
-              <text x="795" y="335" text-anchor="middle">獨立 ecosystem play</text>
+              <text x="295" y="335" text-anchor="middle">&larr; 從 Brain 抽出來的 4 個模組 &mdash; 同樣的線上痛點 &rarr;</text>
+              <text x="795" y="335" text-anchor="middle">獨立生態系延伸</text>
             </g>
 
             <!-- Production-validated note -->
             <g font-family="JetBrains Mono" font-size="10.5" fill="#5c6068">
-              <text x="440" y="375" text-anchor="middle">每一個 module = 一個 production 痛點 &times; 2 個月實戰驗證</text>
+              <text x="440" y="375" text-anchor="middle">每一個模組 = 一個線上痛點 &times; 2 個月實戰驗證</text>
             </g>
 
             <!-- LOC summary bar -->
             <g transform="translate(140, 400)">
               <rect width="600" height="30" rx="6" fill="#16181c" stroke="#1f2126"/>
-              <text x="300" y="20" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="#c7c9d1">total: ~1500 LOC &middot; 5 repos &middot; MIT &middot; production-validated</text>
+              <text x="300" y="20" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="#c7c9d1">合計：~1500 行 &middot; 5 個 repo &middot; MIT &middot; 上線驗證</text>
             </g>
           </svg>
 
           <div class="relation-legend">
             <span class="legend-item">
               <span class="legend-swatch solid"></span>
-              Extracted from Brain
+              從 Brain 抽出來
             </span>
             <span class="legend-item">
               <span class="legend-swatch dashed"></span>
-              Claude Code ecosystem
+              Claude Code 生態系
             </span>
           </div>
         </div>
@@ -591,7 +591,7 @@
 
     <section class="section">
       <div class="full-bleed">
-        <div class="section-label">5 modules</div>
+        <div class="section-label">5 個模組</div>
         <h2 class="section-title">細節</h2>
         <div class="modules">
 
@@ -602,7 +602,7 @@
             </div>
             <p class="module-tagline">Drop-in MCP server template &mdash; ~300 LOC, no vector DB, runs on a Pi.</p>
             <p class="module-why">
-              我蓋 Brain 的 MCP server 時用 SQLite + FTS5 解了 80% 的搜尋需求。沒道理每個人都要從 Pinecone / Weaviate 開始。這是 starter template，給想跑自己 MCP server 但不想搞 vector DB 的人。
+              我蓋 Brain 的 MCP server 時用 SQLite + FTS5 解了 80% 的搜尋需求。沒道理每個人都要從 Pinecone / Weaviate 開始。這是 starter template，給想跑自己 MCP server 但不想搞向量資料庫的人。
             </p>
             <div class="module-stats">~300 LOC &middot; MIT &middot; Python</div>
             <div class="module-install">git clone https://github.com/zx22413/mcp-fts5-starter</div>
@@ -618,7 +618,7 @@
             </div>
             <p class="module-tagline">Drop-in hybrid BM25 + dense retrieval, powered by Google Gemini embeddings.</p>
             <p class="module-why">
-              FTS5 解 80% 場景，剩下 20% 需要語意相似度。把 Gemini embeddings 接進 mcp-fts5-starter 變 hybrid retrieval。Plug-and-play，不用改 main.py。
+              FTS5 解 80% 場景，剩下 20% 需要語意相似度。把 Gemini embeddings 接進 mcp-fts5-starter 變混合檢索。即插即用，不用改 main.py。
             </p>
             <div class="module-stats">~150 LOC &middot; MIT &middot; Python</div>
             <div class="module-install">pip install mcp-fts5-starter-gemini</div>
@@ -634,7 +634,7 @@
             </div>
             <p class="module-tagline">Forgetting layer for RAG &mdash; heat decay + L1/L2/L3 tiered storage.</p>
             <p class="module-why">
-              Production knowledge system 不該保留所有東西。Brain 跑了 2 個月後，舊筆記變成 noise。我蓋了熱度衰減 + 三層梯度儲存：L1 熱資料、L2 溫資料、L3 歸檔。RAG 撈得到的只有 L1+L2，L3 留著但不出現。
+              上線中的知識系統不該保留所有東西。Brain 跑了 2 個月後，舊筆記變成雜訊。我蓋了熱度衰減 + 三層梯度儲存：L1 熱資料、L2 溫資料、L3 歸檔。RAG 撈得到的只有 L1+L2，L3 留著但不出現。
             </p>
             <div class="module-stats">~600 LOC &middot; MIT &middot; Python</div>
             <div class="module-install">pip install forget-rag</div>
@@ -650,7 +650,7 @@
             </div>
             <p class="module-tagline">Rules-as-config restart decider for Python services.</p>
             <p class="module-why">
-              每次 git push Brain 我都要重啟所有 Python service&mdash;&mdash;Bot、MCP server、scheduler，全部關掉再開。但很多 push 只動了一個檔。寫了 rules-as-config：根據改動的檔案決定哪個 service 要重啟，其他放著。Don&rsquo;t restart your whole stack on every git push.
+              每次 git push Brain 我都要重啟所有 Python 服務&mdash;&mdash;Bot、MCP server、scheduler，全部關掉再開。但很多 push 只動了一個檔。寫了 rules-as-config：根據改動的檔案決定哪個服務要重啟，其他放著。Don&rsquo;t restart your whole stack on every git push.
             </p>
             <div class="module-stats">~200 LOC &middot; MIT &middot; Python</div>
             <div class="module-install">pip install smart-restart</div>
@@ -666,7 +666,7 @@
             </div>
             <p class="module-tagline">Plug-and-play UI design agent for Claude Code with 58+ real-world design systems.</p>
             <p class="module-why">
-              這個不是從 Brain 抽出來的，是 Claude Code 用太深、自己做的 plugin。內建 58 個真實設計系統（Linear / Stripe / Notion 等），用一行命令把目前專案套上指定風格。我自己拿來做這個 portfolio 站。
+              這個不是從 Brain 抽出來的，是 Claude Code 用太深、自己做的外掛。內建 58 個真實設計系統（Linear / Stripe / Notion 等），用一行命令把目前專案套上指定風格。我自己拿來做這個 portfolio 站。
             </p>
             <div class="module-stats">Shell + JSON &middot; MIT</div>
             <div class="module-install">git clone https://github.com/zx22413/claude-ui-designer</div>
@@ -678,7 +678,7 @@
         </div>
 
         <div class="closing">
-          五個 modules 加起來大約 <strong>1500 行</strong>。不是因為簡潔很美，是因為<em>簡潔是 production knowledge system 的必要條件</em>。任何一行多餘的 code 都會在 2 個月後變成維運債。
+          五個模組加起來大約 <strong>1500 行</strong>。不是因為簡潔很美，是因為<em>簡潔是上線級知識系統的必要條件</em>。任何一行多餘的程式碼都會在 2 個月後變成維運債。
         </div>
       </div>
     </section>

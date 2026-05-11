@@ -849,11 +849,11 @@
         <span class="sep"></span>
         <span>8 分鐘閱讀</span>
         <span class="sep"></span>
-        <span>Retrospective</span>
+        <span>回顧</span>
       </div>
       <h1 class="article-title">MCP 監控：14 天的稽核，砍掉了我自己的計畫。</h1>
       <p class="article-deck">
-        我以為 instrumentation 會涵蓋所有 Brain 流量。兩週後，數據告訴我我錯了 <span class="factor">~450&times;</span>。
+        我以為監控採集會涵蓋所有 Brain 流量。兩週後，數據告訴我我錯了 <span class="factor">~450&times;</span>。
       </p>
     </div>
 
@@ -861,9 +861,9 @@
       <div class="tldr">
         <div class="tldr-label">TL;DR</div>
         <ul>
-          <li><strong>設計</strong>了一條異常偵測 pipeline（instrumentation &rarr; store &rarr; detector &rarr; judge &rarr; alerter）來監控 Brain 流量。</li>
+          <li><strong>設計</strong>了一條異常偵測管線（採集 &rarr; 儲存 &rarr; 偵測 &rarr; 判斷 &rarr; 告警）來監控 Brain 流量。</li>
           <li><strong>14 天稽核發現涵蓋率只有 0.22%。</strong>真實流量繞過了 decorator 所在的 MCP 層——預期每天 30&ndash;60 筆事件，實際只有 ~4 筆。</li>
-          <li><strong>砍掉自己的 BQML benchmark 計畫，</strong>cron 留著（成本是零），把整個專案改寫成 portfolio retrospective。驗證假設比捍衛假設值得做。</li>
+          <li><strong>砍掉自己的 BQML benchmark 計畫，</strong>cron 留著（成本是零），把整個專案改寫成 portfolio 回顧文。驗證假設比捍衛假設值得做。</li>
         </ul>
       </div>
     </div>
@@ -874,10 +874,10 @@
 
       <h2><span class="step-num">01</span> 假設</h2>
       <p>
-        紙上的計畫很乾淨。<em>Brain</em>（我的私人知識系統）說 MCP。所以只要我用一個小小的 decorator 把每一次 MCP tool call 包起來、把 <code>tool_name</code>、<code>args_hash</code>、<code>latency_ms</code>、<code>status</code> 寫進 SQLite store，我就能看到整個系統的脈搏。從這裡延伸：用 z-score detector 抓每小時的異常、用 Gemini judge 過濾誤報、用 Telegram alerter 發出真正的尖峰。
+        紙上的計畫很乾淨。<em>Brain</em>（我的私人知識系統）說 MCP。所以只要我用一個小小的 decorator 把每一次 MCP tool call 包起來、把 <code>tool_name</code>、<code>args_hash</code>、<code>latency_ms</code>、<code>status</code> 寫進 SQLite，我就能看到整個系統的脈搏。從這裡延伸：用 z-score 偵測器抓每小時的異常、用 Gemini 判斷過濾誤報、用 Telegram 告警發出真正的尖峰。
       </p>
       <p>
-        那個沒寫下來的隱含假設是——<em>MCP 是大門</em>。只要有流量，它就會以 MCP tool call 的形式存在。Modeling 層暖機完之後，我預期會看到<strong>每天 30 到 60 筆事件</strong>。足夠 signal 做正事。
+        那個沒寫下來的隱含假設是——<em>MCP 是大門</em>。只要有流量，它就會以 MCP tool call 的形式存在。建模層暖機完之後，我預期會看到<strong>每天 30 到 60 筆事件</strong>。足夠的訊號做正事。
       </p>
 
       <h2><span class="step-num">02</span> 建置</h2>
@@ -948,12 +948,12 @@
 
     <div class="prose">
       <p>
-        端對端 latency 大約 33ms / 筆。Health 很容易讀：cron 上次執行時間、列數、judge call 成功率。全綠。
+        端對端延遲大約 33ms / 筆。健康狀態很容易讀：cron 上次執行時間、列數、judge 呼叫成功率。全綠。
       </p>
 
       <h2><span class="step-num">03</span> 部署</h2>
       <p>
-        異常偵測在冷 pipeline 上統計上沒意義——樣本太少 z-score 會狂飆。所以我把 readiness 切成三個明確的階段，每一階段行為不同：
+        異常偵測在冷管線上統計上沒意義——樣本太少 z-score 會狂飆。所以我把就緒程度切成三個明確的階段，每一階段行為不同：
       </p>
     </div>
 
@@ -989,7 +989,7 @@
 
       <h2><span class="step-num">04</span> 稽核</h2>
       <p>
-        我數了監控系統觀察那段時間裡，Brain vault 內檔案異動的次數，再對照監控 DB 實際抓到了什麼。
+        我數了監控系統觀察那段時間裡，Brain vault 內檔案異動的次數，再對照監控資料庫實際抓到了什麼。
       </p>
     </div>
 
@@ -1002,7 +1002,7 @@
           <div class="stat-hero">
             <div class="stat-hero-label">涵蓋率</div>
             <p class="stat-hero-value">0.22%</p>
-            <div class="stat-hero-unit">的 Brain 流量真的被 instrumentation 抓到。</div>
+            <div class="stat-hero-unit">的 Brain 流量真的被監控採集抓到。</div>
             <div class="stat-hero-detail">
               <span>2 筆事件入庫</span> &nbsp;/&nbsp; <span>897 次檔案異動</span>
             </div>
@@ -1038,29 +1038,29 @@
 
     <div class="prose">
       <p>
-        Pipeline 在跑。Pipeline 是健康的。Pipeline 幾乎什麼都沒看到。
+        管線在跑。管線是健康的。管線幾乎什麼都沒看到。
       </p>
       <p>
-        Brain 99.78% 的真實流量根本不從 MCP 進來。它從 Telegram bot 進來，或從內部 REST handler<em>直接</em>呼叫核心函式進來——bypass 掉我 instrumentation 所在的 decorator 層。MCP 大門只是三道門裡的一道，而且看起來是最少人走的那一道。
+        Brain 99.78% 的真實流量根本不從 MCP 進來。它從 Telegram bot 進來，或從內部 REST handler<em>直接</em>呼叫核心函式進來——繞過我採集所在的 decorator 層。MCP 大門只是三道門裡的一道，而且看起來是最少人走的那一道。
       </p>
 
       <h2><span class="step-num">05</span> 歸因</h2>
       <p>
-        落差一旦看見，下一個問題就是漏點<em>到底</em>在哪裡。我目前有三個還活著的假設；root cause 還沒完全收斂。
+        落差一旦看見，下一個問題就是漏點<em>到底</em>在哪裡。我目前有三個還活著的假設；根本原因還沒完全收斂。
       </p>
       <ul class="attribution-list">
         <li>
           <span class="h-num">H1</span>
           <span class="h-body">
-            <strong>Decorator 在執行中的 process 沒生效。</strong>
-            Instrumentation 包的是 MCP 層的 entry point。如果 runtime 先 import 了未包裝的模組——Python import 順序很脆弱——decorator 就會悄悄地沒套上。沒 error，沒 log line。
+            <strong>Decorator 在執行中的程序沒生效。</strong>
+            採集包的是 MCP 層的進入點。如果 runtime 先載入了未包裝的模組——Python import 順序很脆弱——decorator 就會悄悄地沒套上。沒錯誤、沒日誌。
           </span>
         </li>
         <li>
           <span class="h-num">H2</span>
           <span class="h-body">
-            <strong>GHA deploy 沒重啟長駐 service。</strong>
-            CI 把新 code 推上去，但 EC2 上的 systemd unit 沒被 restart。新的 decorator 在硬碟上，舊的 process 還在記憶體裡。這個問題會一直咬到下一次重開機。
+            <strong>GitHub Actions 部署沒重啟長駐服務。</strong>
+            CI 把新程式碼推上去，但 EC2 上的 systemd unit 沒被重啟。新的 decorator 在硬碟上，舊的程序還在記憶體裡。這個問題會一直咬到下一次重開機。
           </span>
         </li>
         <li>
@@ -1072,12 +1072,12 @@
         </li>
       </ul>
       <div class="narrowing">
-        要收斂這三個假設並不難——tail systemd log、放一條 debug trace、重新數一次——值得花幾小時。但<em>不</em>值得在還沒搞清楚是哪一個之前花好幾週重建 pipeline。
+        要收斂這三個假設並不難——tail systemd 日誌、放一條 debug trace、重新數一次——值得花幾小時。但<em>不</em>值得在還沒搞清楚是哪一個之前花好幾週重建管線。
       </div>
 
       <h2><span class="step-num">06</span> 決策</h2>
       <p>
-        我原本的下一步是用抓到的資料跑一場 BQML TimesFM benchmark——把 zero-shot foundation model 跟我的 z-score baseline 比一比。每天 ~4 筆事件，這場比較統計上沒意義。所以我在同一個小時內做了三個決定：
+        我原本的下一步是用抓到的資料跑一場 BQML TimesFM benchmark——把 zero-shot 基礎模型跟我的 z-score 基準比一比。每天 ~4 筆事件，這場比較統計上沒意義。所以我在同一個小時內做了三個決定：
       </p>
       <div class="decision">
         <div class="decision-grid">
@@ -1104,7 +1104,7 @@
         我蓋的東西全都正常。Decorator 33ms 跑完。Detector 算得出來。Judge 會回。Alerter 會送。Pipeline 沒有一個環節壞掉。
       </p>
       <p>
-        但它不重要，因為底下的假設錯了，而我所有的 health check<em>永遠</em>不會告訴我。Health 告訴你「機器有開」。Coverage 才告訴你「機器有對著正確的東西」。
+        但它不重要，因為底下的假設錯了，而我所有的健康檢查<em>永遠</em>不會告訴我。健康狀態告訴你「機器有開」。涵蓋率才告訴你「機器有對著正確的東西」。
       </p>
     </div>
 
@@ -1112,14 +1112,14 @@
       <div class="pull-quote-inner">
         <span class="pull-quote-mark">&ldquo;</span>
         <blockquote>
-          自動化系統必須跑 14 天涵蓋率稽核，不只是 health check。<em>『有在跑』 &ne; 『有在做事』。</em>
+          自動化系統必須跑 14 天涵蓋率稽核，不只是健康檢查。<em>『有在跑』 &ne; 『有在做事』。</em>
         </blockquote>
       </div>
     </div>
 
     <div class="prose">
       <p>
-        對一個正在運作的系統來說，最難的不是加東西——而是去問「已經有的東西，是否真的指向現實」。我現在把這件事當作每一套自動化系統的硬性 14 天交付物，跟 build 本身並列：一個數字、一個驗證日期、以及如果數字不吻合就把專案砍掉的意願。
+        對一個正在運作的系統來說，最難的不是加東西——而是去問「已經有的東西，是否真的指向現實」。我現在把這件事當作每一套自動化系統的硬性 14 天交付物，跟建置本身並列：一個數字、一個驗證日期、以及如果數字不吻合就把專案砍掉的意願。
       </p>
       <p>
         那個動作，才是真正困難的地方。
@@ -1141,18 +1141,18 @@
       </p>
 
       <div class="hiring-pull">
-        <em>「程式在跑」&ne;「系統有效」</em>是這次最關鍵的洞察。如果你的 AI 新創需要一個會 audit 自己假設的人，我在你公司會這樣做事：
+        <em>「程式在跑」&ne;「系統有效」</em>是這次最關鍵的洞察。如果你的 AI 新創需要一個會稽核自己假設的人，我在你公司會這樣做事：
       </div>
 
       <ul class="hiring-bullets">
-        <li>設計時盡量縮小。MVP 上 production，14 天後 audit 自己——數字不對就砍，不靠 sunk cost 撐。</li>
-        <li>寫 founder / PM / 客戶讀得懂的決策摘要。第 6 段那個 KILL/KEEP/REWRITE 卡就是範本。</li>
-        <li>「Pipeline 在跑、但不知道有沒有在做事」這類問題我會主動找出來。Brain 的 instrumentation / alerter / cron 全套我自己 ship 過 2 個月。</li>
+        <li>設計時盡量縮小。MVP 上線後 14 天稽核自己——數字不對就砍，不靠沉沒成本撐。</li>
+        <li>寫 founder / PM / 客戶讀得懂的決策摘要。第 6 段那個 砍 / 留 / 改寫 三選一卡就是範本。</li>
+        <li>「管線在跑、但不知道有沒有在做事」這類問題我會主動找出來。Brain 的監控採集 / 告警 / cron 全套我自己上線過 2 個月。</li>
       </ul>
 
       <p class="hiring-close">
         我不寫 ML model，也不號稱資深架構師。<br />
-        <em>「能 kill 自己的計畫比能寫程式更稀缺」</em>是我的核心優勢。
+        <em>「能砍掉自己的計畫比能寫程式更稀缺」</em>是我的核心優勢。
       </p>
 
       <hr class="hiring-rule" />
