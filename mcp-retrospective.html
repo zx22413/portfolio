@@ -205,17 +205,17 @@
     font-size: 14.5px;
     line-height: 1.55;
     color: var(--fg-dim);
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
+    position: relative;
+    padding-left: 17px;
   }
   .tldr li::before {
     content: "";
-    flex-shrink: 0;
+    position: absolute;
+    left: 0;
+    top: 9px;
     width: 5px; height: 5px;
     background: var(--accent);
     border-radius: 50%;
-    margin-top: 9px;
   }
   .tldr li strong { color: var(--fg); font-weight: 500; }
 
@@ -1147,7 +1147,7 @@
       <ul class="hiring-bullets">
         <li>設計時盡量縮小。MVP 上 production，14 天後 audit 自己——數字不對就砍，不靠 sunk cost 撐。</li>
         <li>寫 founder / PM / 客戶讀得懂的決策摘要。第 6 段那個 KILL/KEEP/REWRITE 卡就是範本。</li>
-        <li>「Pipeline 在跑、但不知道有沒有在做事」這類問題我會主動找出來。Brain 的 instrumentation / alerter / cron 全套我自己 ship 過 14 個月。</li>
+        <li>「Pipeline 在跑、但不知道有沒有在做事」這類問題我會主動找出來。Brain 的 instrumentation / alerter / cron 全套我自己 ship 過 2 個月。</li>
       </ul>
 
       <p class="hiring-close">

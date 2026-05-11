@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<title>Brain &mdash; 跑了 14 個月的私人知識系統 &mdash; 曹德偉</title>
+<title>Brain &mdash; 跑了 2 個月的私人知識系統 &mdash; 曹德偉</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -232,17 +232,17 @@
     font-size: 14.5px;
     line-height: 1.55;
     color: var(--fg-dim);
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
+    position: relative;
+    padding-left: 17px;
   }
   .tldr li::before {
     content: "";
-    flex-shrink: 0;
+    position: absolute;
+    left: 0;
+    top: 9px;
     width: 5px; height: 5px;
     background: var(--accent);
     border-radius: 50%;
-    margin-top: 9px;
   }
   .tldr li strong { color: var(--fg); font-weight: 500; }
   .tldr li code {
@@ -634,17 +634,17 @@
     <div class="container-narrow">
       <div class="meta-row">
         <span class="meta-tag">Production</span>
-        <span>14 個月運作</span>
+        <span>2 個月運作</span>
         <span class="sep"></span>
         <span>Architecture</span>
       </div>
-      <h1 class="article-title">Brain &mdash; 跑了 14 個月的私人知識系統。</h1>
+      <h1 class="article-title">Brain &mdash; 跑了 2 個月的私人知識系統。</h1>
       <p class="article-deck">
         為自己蓋的 <strong>AI infrastructure</strong>，從 daily-driven 中學設計。
       </p>
 
       <div class="stats-strip">
-        <div class="stat-cell"><span class="v">14 個月</span><span class="l">運作</span></div>
+        <div class="stat-cell"><span class="v">2 個月</span><span class="l">運作</span></div>
         <div class="stat-cell"><span class="v">24/7</span><span class="l">on production</span></div>
         <div class="stat-cell"><span class="v">daily</span><span class="l">driven</span></div>
         <div class="stat-cell"><span class="v">5</span><span class="l">OSS extracts</span></div>
@@ -692,9 +692,9 @@
 
           <!-- Layer labels -->
           <g font-family="JetBrains Mono" font-size="10.5" fill="#5c6068" letter-spacing="1.5">
-            <text x="40" y="55">[ENTRY LAYER]</text>
-            <text x="40" y="195">[CORE LAYER]</text>
-            <text x="40" y="335">[STORAGE LAYER]</text>
+            <text x="40" y="55">[入口層]</text>
+            <text x="40" y="195">[核心層]</text>
+            <text x="40" y="335">[儲存層]</text>
           </g>
 
           <!-- Entry layer: 3 entry points -->
@@ -726,8 +726,8 @@
           <!-- Core layer: knowledge processor -->
           <g transform="translate(160, 180)">
             <rect width="560" height="80" rx="10" fill="url(#coreGrad)" stroke="#5e6ad2"/>
-            <text x="280" y="32" text-anchor="middle" font-family="Inter Tight, system-ui" font-size="15" font-weight="600" fill="#f7f8f8">Knowledge Processor (Python)</text>
-            <text x="280" y="55" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#8b95e8">ingestion &middot; parsing &middot; linking &middot; hybrid retrieval &middot; daily-digest</text>
+            <text x="280" y="32" text-anchor="middle" font-family="Inter Tight, system-ui" font-size="15" font-weight="600" fill="#f7f8f8">知識處理器（Python）</text>
+            <text x="280" y="55" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#8b95e8">資料攝取．解析．關聯．混合搜尋．每日摘要</text>
           </g>
 
           <!-- Arrow core -> storage -->
@@ -738,27 +738,27 @@
           <!-- Storage layer -->
           <g transform="translate(160, 320)">
             <rect width="560" height="92" rx="10" fill="url(#bgGrad)" stroke="#2a2d33"/>
-            <text x="280" y="28" text-anchor="middle" font-family="Inter Tight, system-ui" font-size="14" font-weight="600" fill="#f7f8f8">Vault (.md files in Obsidian)</text>
+            <text x="280" y="28" text-anchor="middle" font-family="Inter Tight, system-ui" font-size="14" font-weight="600" fill="#f7f8f8">Vault（Obsidian 內的 .md 檔案）</text>
             <line x1="40" y1="42" x2="520" y2="42" stroke="#1f2126" stroke-dasharray="3,3"/>
-            <text x="280" y="62" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#c7c9d1">+ SQLite (FTS5 + 向量索引)</text>
+            <text x="280" y="62" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#c7c9d1">+ SQLite（FTS5 + 向量索引）</text>
             <text x="280" y="80" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#c7c9d1">+ forget-rag 三層梯度</text>
           </g>
 
           <!-- Cross-cutting monitoring -->
           <g transform="translate(740, 180)">
             <rect width="120" height="220" rx="10" fill="url(#bgGrad)" stroke="#5c6068" stroke-dasharray="4,4"/>
-            <text x="60" y="30" text-anchor="middle" font-family="JetBrains Mono" font-size="10.5" fill="#8a8f98" letter-spacing="1">[MONITORING]</text>
+            <text x="60" y="30" text-anchor="middle" font-family="JetBrains Mono" font-size="10.5" fill="#8a8f98" letter-spacing="1">[監控管線]</text>
             <g font-family="Inter Tight, system-ui" font-size="11.5" fill="#c7c9d1">
-              <text x="60" y="62" text-anchor="middle">instrumentation</text>
+              <text x="60" y="62" text-anchor="middle">採集</text>
               <text x="60" y="82" text-anchor="middle" font-size="10" fill="#8a8f98">&darr;</text>
-              <text x="60" y="102" text-anchor="middle">store</text>
+              <text x="60" y="102" text-anchor="middle">儲存</text>
               <text x="60" y="122" text-anchor="middle" font-size="10" fill="#8a8f98">&darr;</text>
-              <text x="60" y="142" text-anchor="middle">detector</text>
+              <text x="60" y="142" text-anchor="middle">偵測</text>
               <text x="60" y="162" text-anchor="middle" font-size="10" fill="#8a8f98">&darr;</text>
-              <text x="60" y="182" text-anchor="middle">judge</text>
+              <text x="60" y="182" text-anchor="middle">判斷</text>
               <text x="60" y="202" text-anchor="middle" font-size="10" fill="#8a8f98">&darr;</text>
             </g>
-            <text x="60" y="218" text-anchor="middle" font-family="Inter Tight, system-ui" font-size="11.5" fill="#d4584c">alerter</text>
+            <text x="60" y="218" text-anchor="middle" font-family="Inter Tight, system-ui" font-size="11.5" fill="#d4584c">告警</text>
           </g>
 
           <!-- Bottom retrospective link -->
@@ -776,7 +776,7 @@
 
       <h2><span class="step-num">02</span> 5 個關鍵設計選擇</h2>
       <p>
-        這 5 個選擇是 Brain 跟「另一個 RAG demo」差最多的地方。每一個都是 trade-off，每一個都在 14 個月的 daily-driven 中真的被驗證過。
+        這 5 個選擇是 Brain 跟「另一個 RAG demo」差最多的地方。每一個都是 trade-off，每一個都在 2 個月的 daily-driven 中真的被驗證過。
       </p>
     </div>
 
@@ -795,7 +795,7 @@
           <span class="choice-num">Choice 02</span>
           <h3 class="choice-q">為什麼 <em>熱度衰減 + 三層儲存</em> 而非無限保留？</h3>
           <p class="choice-body">
-            Brain 跑 14 個月，舊筆記變 noise。RAG 撈到 2024 年的舊草稿打斷正在做的事。<strong>L1（熱）/ L2（溫）/ L3（歸檔）不刪除舊資料</strong>，只是讓 RAG 預設只看 L1+L2。能不能搜到 L3 是用戶顯式選擇。Production knowledge system 的合理 default 是<em>「最近的最重要」</em>，不是「全部都重要」。這個 module 後來抽出來變成 <code>forget-rag</code>。
+            Brain 跑 2 個月，舊筆記變 noise。RAG 撈到 2024 年的舊草稿打斷正在做的事。<strong>L1（熱）/ L2（溫）/ L3（歸檔）不刪除舊資料</strong>，只是讓 RAG 預設只看 L1+L2。能不能搜到 L3 是用戶顯式選擇。Production knowledge system 的合理 default 是<em>「最近的最重要」</em>，不是「全部都重要」。這個 module 後來抽出來變成 <code>forget-rag</code>。
           </p>
         </div>
 
@@ -811,7 +811,7 @@
           <span class="choice-num">Choice 04</span>
           <h3 class="choice-q">為什麼 <em>daily-driven cron</em> 而非 real-time push？</h3>
           <p class="choice-body">
-            日報 / 週報 / 維護任務全是 cron。實時 push 要處理 backpressure / retry / dead letter queue，<strong>cron 只要 retry-on-fail 就好</strong>。錯誤面積差一個數量級。trade-off 是 latency——但個人知識系統不需要 sub-second，<em>需要的是不會壞</em>。Brain 上線 14 個月，cron 任務的恢復成本接近零；real-time push 一壞就要花一整個下午查 queue。
+            日報 / 週報 / 維護任務全是 cron。實時 push 要處理 backpressure / retry / dead letter queue，<strong>cron 只要 retry-on-fail 就好</strong>。錯誤面積差一個數量級。trade-off 是 latency——但個人知識系統不需要 sub-second，<em>需要的是不會壞</em>。Brain 上線 2 個月，cron 任務的恢復成本接近零；real-time push 一壞就要花一整個下午查 queue。
           </p>
         </div>
 
@@ -832,14 +832,14 @@
     <div class="prose">
       <h2><span class="step-num">03</span> 這個系統證明我能在 AI 新創做什麼</h2>
       <p>
-        Portfolio 不是「給你看程式碼有多漂亮」，是<em>把抽象能力翻譯成可驗證的 claim</em>。Brain 跑了 14 個月，下面三條是它證明的東西——每一條都有 evidence，不是 buzzword：
+        Portfolio 不是「給你看程式碼有多漂亮」，是<em>把抽象能力翻譯成可驗證的 claim</em>。Brain 跑了 2 個月，下面三條是它證明的東西——每一條都有 evidence，不是 buzzword：
       </p>
       <div class="claims">
         <div class="claim">
           <span class="claim-num">Claim 01</span>
           <span class="claim-body">
             <strong>設計 production 級 AI infrastructure。</strong>
-            <em>14 個月真的在跑，不是 demo。</em>多入口、單一真相、cron-as-backbone，從頭自己設計、自己 ship、自己 maintain。
+            <em>2 個月真的在跑，不是 demo。</em>多入口、單一真相、cron-as-backbone，從頭自己設計、自己 ship、自己 maintain。
           </span>
         </div>
         <div class="claim">
@@ -870,7 +870,7 @@
       </p>
 
       <p class="hiring-body">
-        Brain 跑了 <strong>14 個月</strong>。多入口、混合搜尋、熱度衰減、cron-as-backbone，全自己設計自己 ship。它不是在 GitHub 上躺著的 starter repo——是我每天在用的 daily-driven 系統。
+        Brain 跑了 <strong>2 個月</strong>。多入口、混合搜尋、熱度衰減、cron-as-backbone，全自己設計自己 ship。它不是在 GitHub 上躺著的 starter repo——是我每天在用的 daily-driven 系統。
       </p>
 
       <div class="hiring-pull">
