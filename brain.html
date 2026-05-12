@@ -780,9 +780,9 @@
         系統掛了我就得開電腦修——而我懶得每天為這件事開電腦。所以才有三個入口、所以才有 cron 排程、所以才有後面那些設計。多數設計其實都是這樣，從「我不想每天遇到這個」回推出來的。
       </p>
 
-      <h2><span class="step-num">02</span> 5 個關鍵設計選擇</h2>
+      <h2><span class="step-num">02</span> 6 個關鍵設計選擇</h2>
       <p>
-        下面 5 個選擇，每一個都是取捨，每一個都在過去 2 個月裡被我自己用爛過——有些用爛了才知道當初選對，有些用爛了才知道當初選錯（後者比較多）。
+        下面 6 個選擇，每一個都是取捨，每一個都在過去 2 個月裡被我自己用爛過——有些用爛了才知道當初選對，有些用爛了才知道當初選錯（後者比較多）。
       </p>
     </div>
 
@@ -818,6 +818,17 @@
 
         <div class="choice">
           <span class="choice-num">Choice 04</span>
+          <h3 class="choice-q">Bot 接到訊息後，為什麼還要再過一層 <em>hybrid router</em>？</h3>
+          <p class="choice-body">
+            5 個正交 intent——<strong>meeting / clipping / chat / memo / search</strong>——每一個要做的事完全不同：存逐字稿、抓網頁、撈舊筆記、寫備忘、跑 Claude session。如果每次都直接丟 LLM 分類，<strong>單次成本是浪費</strong>、延遲也沒必要。<br />
+            所以 router 分兩階段。先用 regex 抓不會搞錯的 pattern（URL、會議記錄前綴），這層<em>完全不付 LLM 錢</em>就分流完；剩下模糊的才丟 Gemini Flash 判意圖，confidence &lt; 0.5 還要 fallback 回 regex。會付 LLM 錢的最後只剩 <code>chat</code> / <code>search</code>——它們本來就要呼叫核心模型。<br />
+            副作用是這個 router 變成 source-agnostic：TG Bot 跟 PWA REST API 共用同一份 routing 邏輯，靠 <code>RouteContext</code> dataclass 和 <code>Runner</code> Protocol 把 transport 細節剝乾淨。換 channel 不用重寫 router。<br />
+            <em>放到團隊裡，這代表我會先問兩件事：哪些訊息根本不該過 LLM？哪些抽象能讓你之後換 channel 不必重寫業務邏輯？</em>
+          </p>
+        </div>
+
+        <div class="choice">
+          <span class="choice-num">Choice 05</span>
           <h3 class="choice-q">骨幹為什麼是 <em>cron 排程</em>？</h3>
           <p class="choice-body">
             日報 / 週報 / 維護任務全是 cron。即時推送要處理 backpressure、retry、dead letter queue——三個東西每一個壞了都會 cascade；<strong>cron 只要「失敗重試」</strong>就好。出錯面積差一個數量級。代價是延遲，但個人知識系統不需要毫秒級回應，我寧可慢但穩。兩個月跑下來，cron 任務的恢復成本接近零；real-time push 一壞，就會搞掉我一個下午（之前在別的專案踩過，所以這次直接避開）。<br />
@@ -826,7 +837,7 @@
         </div>
 
         <div class="choice">
-          <span class="choice-num">Choice 05</span>
+          <span class="choice-num">Choice 06</span>
           <h3 class="choice-q">為什麼上線 MCP 監控但 <em>14 天後砍計畫</em>？</h3>
           <p class="choice-body">
             Phase 0 上線後跑稽核，數字出來——監控只抓到 <strong>0.22% 的流量</strong>。剩下 99.78% 走 Bot / REST 直呼核心，根本不過 MCP 那一層。<br />
