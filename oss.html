@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<title>OSS Extracts &mdash; 從 Brain 抽出來的 5 個 modules &mdash; 曹德偉</title>
+<title>OSS Extracts &mdash; 4 個 Brain 抽出物 + 1 個生態延伸 &mdash; 曹德偉</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400;1,8..60,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -461,15 +461,15 @@
       <div class="container-narrow">
         <div class="meta-row">
           <span class="meta-tag">OSS</span>
-          <span>5 個模組</span>
+          <span>4 + 1</span>
           <span class="sep"></span>
           <span>總計 ~1500 行</span>
           <span class="sep"></span>
           <span>MIT</span>
         </div>
-        <h1 class="page-title">OSS 拆解 &mdash; 從 Brain 抽出來的 <em>5</em> 個模組</h1>
+        <h1 class="page-title">OSS 拆解 &mdash; <em>4</em> 個 Brain 抽出物 + 1 個生態延伸</h1>
         <p class="subhead">
-          每一個都是 Brain 跑兩個月時冒出來的工具——<strong>先用、再修、再抽出來</strong>。
+          Brain 跑了 2 個月後，真正留下來的不是「5 個 repo」，而是 <strong>4 個 production muscle</strong>：演算法、ops、protocol、reference implementation。另 1 個 <code>claude-ui-designer</code> 是 Claude Code 用太深長出來的生態延伸，不算 Brain muscle。
         </p>
       </div>
     </section>
@@ -479,7 +479,7 @@
         <div class="section-label">Architecture</div>
         <h2 class="section-title">Brain &rarr; Extracts 關係圖</h2>
         <div class="relation-block">
-          <svg class="relation-svg" viewBox="0 0 880 460" xmlns="http://www.w3.org/2000/svg" aria-label="Brain to extracts relation diagram">
+          <svg class="relation-svg" viewBox="0 0 920 460" xmlns="http://www.w3.org/2000/svg" aria-label="Brain to extracts relation diagram">
             <defs>
               <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="#5c6068"/>
@@ -508,7 +508,7 @@
               <text x="295" y="180" text-anchor="middle">搜尋層 +</text>
               <text x="485" y="180" text-anchor="middle">記憶層</text>
               <text x="675" y="180" text-anchor="middle">部署層</text>
-              <text x="800" y="180" text-anchor="middle" fill="#d4a24c">外部生態</text>
+              <text x="845" y="180" text-anchor="middle" fill="#d4a24c">外部生態</text>
             </g>
 
             <!-- Arrows from Brain to each layer label -->
@@ -517,7 +517,7 @@
               <path d="M 410 122 Q 410 150 295 165"/>
               <path d="M 440 122 L 485 165"/>
               <path d="M 470 122 Q 470 150 675 165"/>
-              <path d="M 500 122 Q 500 150 800 165" stroke-dasharray="4,4"/>
+              <path d="M 500 122 Q 500 150 845 165" stroke-dasharray="4,4"/>
             </g>
 
             <!-- 5 module boxes -->
@@ -547,7 +547,7 @@
                 <text x="85" y="50" text-anchor="middle" font-size="10.5" fill="#8a8f98">rules-as-config restart</text>
                 <text x="85" y="64" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#5c6068">~200 LOC</text>
               </g>
-              <g transform="translate(720, 200)">
+              <g transform="translate(770, 200)">
                 <rect width="150" height="74" rx="8" fill="url(#modGrad)" stroke="#5c6068" stroke-dasharray="5,4"/>
                 <text x="75" y="26" text-anchor="middle" font-family="JetBrains Mono" font-size="11" font-weight="600" fill="#8b95e8">claude-ui</text>
                 <text x="75" y="40" text-anchor="middle" font-family="JetBrains Mono" font-size="11" font-weight="600" fill="#8b95e8">-designer</text>
@@ -557,10 +557,10 @@
             </g>
 
             <!-- Bottom annotation -->
-            <line x1="60" y1="305" x2="820" y2="305" stroke="#1f2126" stroke-dasharray="3,3"/>
+            <line x1="60" y1="305" x2="860" y2="305" stroke="#1f2126" stroke-dasharray="3,3"/>
             <g font-family="Source Serif 4, serif" font-size="13" font-style="italic" fill="#8a8f98">
               <text x="295" y="335" text-anchor="middle">&larr; 從 Brain 抽出來的 4 個模組 &mdash; 同樣的線上痛點 &rarr;</text>
-              <text x="795" y="335" text-anchor="middle">獨立生態系延伸</text>
+              <text x="845" y="335" text-anchor="middle">獨立生態系延伸</text>
             </g>
 
             <!-- Production-validated note -->
@@ -571,7 +571,7 @@
             <!-- LOC summary bar -->
             <g transform="translate(140, 400)">
               <rect width="600" height="30" rx="6" fill="#16181c" stroke="#1f2126"/>
-              <text x="300" y="20" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="#c7c9d1">合計：~1500 行 &middot; 5 個 repo &middot; MIT &middot; 上線驗證</text>
+              <text x="300" y="20" text-anchor="middle" font-family="JetBrains Mono" font-size="11.5" fill="#c7c9d1">合計：~1500 行 &middot; 4 + 1 個 repo &middot; MIT &middot; 上線驗證</text>
             </g>
           </svg>
 
@@ -591,7 +591,7 @@
 
     <section class="section">
       <div class="full-bleed">
-        <div class="section-label">5 個模組</div>
+        <div class="section-label">4 + 1 模組</div>
         <h2 class="section-title">細節</h2>
         <div class="modules">
 
@@ -678,7 +678,7 @@
         </div>
 
         <div class="closing">
-          五個模組合起來大概 <strong>1500 行</strong>——這個數字是被現實逼出來的。每多一百行，未來就要多花時間維護；<em>跑兩個月之後，這個帳算起來特別清楚</em>。
+          4 + 1 個模組合起來大概 <strong>1500 行</strong>——這個數字是被現實逼出來的。每多一百行，未來就要多花時間維護；<em>跑兩個月之後，這個帳算起來特別清楚</em>。
         </div>
       </div>
     </section>

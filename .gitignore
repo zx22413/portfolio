@@ -7,3 +7,9 @@ Thumbs.db
 .vscode/
 node_modules/
 .wrangler/
+.review-prompt.md
+.review-output.md
+.review-stderr.log
+.draft-prompt.md
+.drafts.md
+.draft-stderr.log

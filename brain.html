@@ -647,7 +647,7 @@
         <div class="stat-cell"><span class="v">2 個月</span><span class="l">運作</span></div>
         <div class="stat-cell"><span class="v">24/7</span><span class="l">全天候運作</span></div>
         <div class="stat-cell"><span class="v">天天</span><span class="l">在用</span></div>
-        <div class="stat-cell"><span class="v">5</span><span class="l">OSS 拆解模組</span></div>
+        <div class="stat-cell"><span class="v">4+1</span><span class="l">OSS 產出</span></div>
       </div>
     </div>
 
@@ -658,7 +658,7 @@
           <li><strong>入口</strong>：Telegram Bot / REST API / MCP server。</li>
           <li><strong>核心</strong>：SQLite + FTS5 + 向量混合搜尋 + 熱度衰減記憶層。</li>
           <li><strong>部署</strong>：CF Workers + EC2 + GitHub Actions，全部上線運作。</li>
-          <li><strong>產出</strong>：從 Brain 抽出 <code>5 個</code> 獨立 OSS 模組（forget-rag、mcp-fts5-starter 等）。</li>
+          <li><strong>產出</strong>：從 Brain 抽出 <code>4 個</code> production muscle（forget-rag、smart-restart、mcp-fts5-starter、mcp-fts5-starter-gemini），另有 <code>1 個</code> Claude Code 生態延伸（claude-ui-designer）。</li>
         </ul>
       </div>
     </div>
@@ -793,7 +793,8 @@
           <span class="choice-num">Choice 01</span>
           <h3 class="choice-q">底層為什麼用 <em>SQLite + FTS5</em>？</h3>
           <p class="choice-body">
-            啟動成本低、樹莓派跑得動、不用 <code>docker compose</code> 起 4 個服務。<strong>FTS5 解掉 80% 的搜尋場景</strong>；剩下 20% 才接 Gemini embeddings 做混合。決策原則一句話：<em>先從跑得動的最簡單方案開始</em>。如果哪天 SQLite 撐不住——譬如資料突然漲十倍——那是個好問題。第 60 天我還沒遇到（其實是還早得很）。
+            啟動成本低、樹莓派跑得動、不用 <code>docker compose</code> 起 4 個服務。<strong>FTS5 解掉 80% 的搜尋場景</strong>；剩下 20% 才接 Gemini embeddings 做混合。決策原則一句話：<em>先從跑得動的最簡單方案開始</em>。如果哪天 SQLite 撐不住——譬如資料突然漲十倍——那是個好問題。第 60 天我還沒遇到（其實是還早得很）。<br />
+            <em>放到團隊裡，這代表我會先問：現在真的需要重型架構，還是只是我們想用看起來比較厲害的東西？</em>
           </p>
         </div>
 
@@ -801,7 +802,8 @@
           <span class="choice-num">Choice 02</span>
           <h3 class="choice-q">為什麼讓舊筆記自然<em>淡出</em>？</h3>
           <p class="choice-body">
-            跑兩個月之後，RAG 開始撈出 2024 年的東西。是那種我自己都忘了寫過的舊草稿，半成品，方向已經改過三次的那種。它撈出來打斷我，我才想起來——對，這篇我那時候沒寫完。<strong>舊筆記不會自己變新，可是 RAG 不知道</strong>（也沒理由要知道）。所以做了 L1（熱）/ L2（溫）/ L3（歸檔）三層儲存——舊資料不刪掉，只是 RAG 預設只看 L1+L2，要搜到 L3 得明確指定。原則簡單到我跑了兩個月才意識到不做不行——這個模組後來抽出來變成 <code>forget-rag</code>。
+            跑兩個月之後，RAG 開始撈出 2024 年的東西。是那種我自己都忘了寫過的舊草稿，半成品，方向已經改過三次的那種。它撈出來打斷我，我才想起來——對，這篇我那時候沒寫完。<strong>舊筆記不會自己變新，可是 RAG 不知道</strong>（也沒理由要知道）。所以做了 L1（熱）/ L2（溫）/ L3（歸檔）三層儲存——舊資料不刪掉，只是 RAG 預設只看 L1+L2，要搜到 L3 得明確指定。原則簡單到我跑了兩個月才意識到不做不行——這個模組後來抽出來變成 <code>forget-rag</code>。<br />
+            <em>放到團隊裡，這代表我不會只追求「資料越多越好」，我會追問哪些資料會讓模型變吵、變舊、變不準。</em>
           </p>
         </div>
 
@@ -809,7 +811,8 @@
           <span class="choice-num">Choice 03</span>
           <h3 class="choice-q">主入口為什麼是 <em>TG Bot</em>？</h3>
           <p class="choice-body">
-            我在哪、Bot 在哪。手機上、辦公室、家裡——同一個對話視窗。Web UI 要設計 UX、處理 session、做認證；Bot <strong>直接用 Telegram 的基礎建設</strong>，省 90% 的工。代價是一次只能服務我一個人（但 Brain 本來就是<em>私人系統</em>，這個代價對我來說等於零）。我每次想做 Web UI 的衝動，最後都被「也才我一個人用」說服回來。
+            我在哪、Bot 在哪。手機上、辦公室、家裡——同一個對話視窗。Web UI 要設計 UX、處理 session、做認證；Bot <strong>直接用 Telegram 的基礎建設</strong>，省 90% 的工。代價是一次只能服務我一個人（但 Brain 本來就是<em>私人系統</em>，這個代價對我來說等於零）。我每次想做 Web UI 的衝動，最後都被「也才我一個人用」說服回來。<br />
+            <em>放到團隊裡，這代表我會先選能驗證核心價值的入口，不會為了完整產品外觀先燒掉一輪 UI 成本。</em>
           </p>
         </div>
 
@@ -817,7 +820,8 @@
           <span class="choice-num">Choice 04</span>
           <h3 class="choice-q">骨幹為什麼是 <em>cron 排程</em>？</h3>
           <p class="choice-body">
-            日報 / 週報 / 維護任務全是 cron。即時推送要處理 backpressure、retry、dead letter queue——三個東西每一個壞了都會 cascade；<strong>cron 只要「失敗重試」</strong>就好。出錯面積差一個數量級。代價是延遲，但個人知識系統不需要毫秒級回應，我寧可慢但穩。兩個月跑下來，cron 任務的恢復成本接近零；real-time push 一壞，就會搞掉我一個下午（之前在別的專案踩過，所以這次直接避開）。
+            日報 / 週報 / 維護任務全是 cron。即時推送要處理 backpressure、retry、dead letter queue——三個東西每一個壞了都會 cascade；<strong>cron 只要「失敗重試」</strong>就好。出錯面積差一個數量級。代價是延遲，但個人知識系統不需要毫秒級回應，我寧可慢但穩。兩個月跑下來，cron 任務的恢復成本接近零；real-time push 一壞，就會搞掉我一個下午（之前在別的專案踩過，所以這次直接避開）。<br />
+            <em>放到團隊裡，這代表我會把可靠性放在炫技前面：如果產品不需要即時，就不要先把自己綁進即時系統的維護成本。</em>
           </p>
         </div>
 
@@ -827,7 +831,8 @@
           <p class="choice-body">
             Phase 0 上線後跑稽核，數字出來——監控只抓到 <strong>0.22% 的流量</strong>。剩下 99.78% 走 Bot / REST 直呼核心，根本不過 MCP 那一層。<br />
             當下我有兩個選擇：花一個月修監控架構；或承認假設錯，砍掉 Phase 1 的 BQML 計畫，把這 14 天寫成回顧文。<em>我選後者</em>——其實當下心情很差，但回頭看是好的決定。<br />
-            我現在每一個新自動化專案都會留一個「第 14 天稽核」當硬性交付物。這個原則就是上次砍出來的。
+            我現在每一個新自動化專案都會留一個「第 14 天稽核」當硬性交付物。這個原則就是上次砍出來的。<br />
+            <em>放到團隊裡，這代表我不會用沉沒成本保護自己的方案；數字說假設錯了，我會改方向。</em>
           </p>
           <a class="choice-link" href="mcp-retrospective.html">
             完整故事看 MCP 監控回顧 <span class="arrow">&rarr;</span>
@@ -890,9 +895,9 @@
       </div>
 
       <p class="hiring-close">
-        我寫不出 ML model，也沒當過資深架構師——我每次想到「資深架構師」這個詞都覺得跟自己無關。<br />
-        但有一件事我大概比我認識的多數人都熟練：寫了三天的方案，發現方向錯了，隔天早上重來。<br />
-        <em>聽起來像優點，其實是因為我已經砍過很多次，砍到沒感覺了。</em>
+        我的定位不是 ML researcher，而是 AI system delivery / solution architecture。<br />
+        我擅長的是把模糊 AI 需求推到上線，然後用稽核、日誌、使用行為回頭檢查它到底有沒有做事。<br />
+        <em>寫了三天的方案，發現方向錯了，隔天早上重來——這件事我已經練得很熟。</em>
       </p>
 
       <hr class="hiring-rule" />
