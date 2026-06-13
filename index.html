@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<title>曹德偉 — 上線級 AI 系統</title>
+<title>曹德偉 — 用 AI 工作流把想法做成產品</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400;1,8..60,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -262,7 +262,7 @@
     .card-flagship { grid-column: span 12; }
   }
   @media (min-width: 1024px) {
-    .card { grid-column: span 4; }
+    .card { grid-column: span 6; }
     .card-flagship {
       grid-column: span 12;
       min-height: 260px;
@@ -446,18 +446,18 @@
       <div class="container">
         <span class="hero-eyebrow">
           <span class="pulse"></span>
-          Brain &mdash; 2 個月 production dogfood
+          一個人 &middot; 用 AI 工作流 &middot; 做出 4 個跨領域 demo
         </span>
-        <h1 class="headline">以非技術背景，主導上線級 AI 系統開發。</h1>
+        <h1 class="headline">我用 AI 工作流，把想法快速做成<em>能動的產品</em>。</h1>
         <p class="subhead">
-          我不是傳統工程師出身，而是透過 <strong>agentic engineering</strong>（Claude Code 為主）把 Brain 推到每天使用。2 個月 production dogfood 後，它掉出 <strong>4 個 Brain 抽出物 + 1 個 Claude Code 生態延伸</strong>，也留下了一篇 MCP 監控失敗稽核。
+          我不是傳統工程師出身。但同一套以 AI 為核心的工作流，讓我一個人就能把不同領域的想法做成可以實際操作的 demo——<strong>AI 知識系統、會議記錄產品、體感遊戲、公司內容自動化</strong>。動手做、快速驗證概念，是我跟多數產品經理最大的不同。
         </p>
         <div class="cta-row">
-          <a class="btn btn-primary" href="mcp-retrospective.html">
-            閱讀旗艦個案 <span class="arrow">&rarr;</span>
+          <a class="btn btn-primary" href="#projects">
+            看四個 demo <span class="arrow">&rarr;</span>
           </a>
-          <a class="btn btn-secondary" href="oss.html">
-            看 4+1 OSS <span class="arrow">&rarr;</span>
+          <a class="btn btn-secondary" href="about.html">
+            關於我 <span class="arrow">&rarr;</span>
           </a>
         </div>
       </div>
@@ -467,58 +467,70 @@
       <div class="container">
         <div class="section-header">
           <div>
-            <div class="section-label">01 &mdash; 精選作品</div>
-            <h2 class="section-title">三個專案，呈現我的思考方式</h2>
+            <div class="section-label">01 &mdash; 四個 demo</div>
+            <h2 class="section-title">同一套工作流，做出來的四件不同的東西</h2>
           </div>
         </div>
 
         <div class="grid-projects">
-          <article class="card card-flagship">
+          <article class="card">
             <div class="card-meta">
-              <span class="card-index">02 / 旗艦</span>
-              <span class="card-flag">&#9733; 從這裡看起</span>
+              <span class="card-index">01 / 上線中 · 每天自動跑</span>
             </div>
-            <h3 class="card-title">MCP 監控回顧</h3>
-            <p class="card-desc">連續兩次稽核挖出兩個錯誤假設——文章是完整的決策過程。</p>
+            <h3 class="card-title">Brain &mdash; 自己會跑的 AI 知識系統</h3>
+            <p class="card-desc">「我收藏一堆東西卻從不回看；而我自己做的自動化老是要靠我手動推。我想要一個不依賴我、自己會跑的系統。」</p>
+            <p style="font-size:13.5px;color:var(--muted);margin:0;">收集 → 整理 → 摘要 → 搜尋 → 跨對話記憶全自動，部署上雲、每天自己產日報週報。</p>
             <div class="tags">
-              <span class="tag">系統設計</span>
-              <span class="tag">Eval</span>
-              <span class="tag">判斷</span>
-              <span class="tag">回顧</span>
+              <span class="tag">個人痛點出發</span>
+              <span class="tag">一人開發</span>
+              <span class="tag">持續運行</span>
             </div>
-            <a class="card-cta" href="mcp-retrospective.html">
-              閱讀稽核全文 <span class="arrow">&rarr;</span>
-            </a>
+            <a class="card-cta" href="brain.html">看它怎麼運作 <span class="arrow">&rarr;</span></a>
           </article>
 
           <article class="card">
             <div class="card-meta">
-              <span class="card-index">01 / 上線中</span>
+              <span class="card-index">02 / 產品 demo</span>
             </div>
-            <h3 class="card-title">Brain</h3>
-            <p class="card-desc">跑了 2 個月。「上線後會發生什麼」我已經實戰過。</p>
+            <h3 class="card-title">Meeting Notes &mdash; 開完會 3 分鐘出記錄</h3>
+            <p class="card-desc">「開完會還要花時間整理記錄、再貼到群組——這段我每週都在重複，所以乾脆把它做成一鍵就好的產品。」</p>
+            <p style="font-size:13.5px;color:var(--muted);margin:0;">上傳音檔或逐字稿，自動產出結構化記錄 + 可直接貼到 LINE 的摘要。</p>
             <div class="tags">
-              <span class="tag">MCP</span>
-              <span class="tag">FTS5</span>
-              <span class="tag">RAG</span>
-              <span class="tag">2 個月</span>
+              <span class="tag">真實重複痛點</span>
+              <span class="tag">可上線產品</span>
+              <span class="tag">多人可用</span>
             </div>
-            <a class="card-cta" href="brain.html">架構說明 <span class="arrow">&rarr;</span></a>
+            <a class="card-cta" href="meeting-note.html">看怎麼運作 <span class="arrow">&rarr;</span></a>
           </article>
 
           <article class="card">
             <div class="card-meta">
-              <span class="card-index">03 / 開源</span>
+              <span class="card-index">03 / 互動原型</span>
             </div>
-            <h3 class="card-title">OSS 抽出物（4+1）</h3>
-            <p class="card-desc">Brain 2 個月 production dogfood 後抽出 4 個 muscle：演算法、ops、protocol、reference impl；另有 1 個 Claude Code 生態延伸。</p>
+            <h3 class="card-title">Beat Slash &mdash; 戴上裝置就能玩</h3>
+            <p class="card-desc">「我想知道：用 AI 工作流，我能多快把一個抽象構想，變成大家摸得到、能一起玩的真東西？」</p>
+            <p style="font-size:13.5px;color:var(--muted);margin:0;">從調研到可玩 demo，一個人幾天做出「拿起裝置揮砍節奏」的體感遊戲。</p>
             <div class="tags">
-              <span class="tag">forget-rag</span>
-              <span class="tag">smart-restart</span>
-              <span class="tag">MCP protocol</span>
-              <span class="tag">+1 ecosystem</span>
+              <span class="tag">快速驗證</span>
+              <span class="tag">從零到可玩</span>
+              <span class="tag">幾天完成</span>
             </div>
-            <a class="card-cta" href="oss.html">看 4+1 架構 <span class="arrow">&rarr;</span></a>
+            <a class="card-cta" href="beat-slash.html">看開發過程 <span class="arrow">&rarr;</span></a>
+          </article>
+
+          <article class="card">
+            <div class="card-meta">
+              <span class="card-index">04 / 公司營運場景</span>
+            </div>
+            <h3 class="card-title">把 AI 工作流導入公司營運</h3>
+            <p class="card-desc">「公司每天有大量重複的營運瑣事——開會記錄、資料整理、內容產製。我想把這些交給我設計的 AI 工作流，讓人只留下來做判斷。」</p>
+            <p style="font-size:13.5px;color:var(--muted);margin:0;">我設計的 agent 工作流已在公司真實營運裡跑，例如「錄音 → 自動產會議記錄 → 存進公司知識庫」就是其中一條。</p>
+            <div class="tags">
+              <span class="tag">真實營運導入</span>
+              <span class="tag">agent 工作流</span>
+              <span class="tag">人只做判斷</span>
+            </div>
+            <a class="card-cta" href="jacfitness.html">了解更多 <span class="arrow">&rarr;</span></a>
           </article>
         </div>
 

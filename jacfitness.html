@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<title>把 AI 工作流導入公司營運 &mdash; 曹德偉</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #08090a;
+    --bg-elev: #101113;
+    --bg-elev-2: #16181c;
+    --border: #1f2126;
+    --border-strong: #2a2d33;
+    --fg: #f7f8f8;
+    --fg-dim: #c7c9d1;
+    --muted: #8a8f98;
+    --muted-2: #5c6068;
+    --accent: #5e6ad2;
+    --accent-hi: #8b95e8;
+    --accent-soft: rgba(94, 106, 210, 0.14);
+    --accent-glow: rgba(94, 106, 210, 0.32);
+    --success: #4cb782;
+    --warn: #d4a24c;
+    --danger: #d4584c;
+
+    --font-sans: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-serif: "Source Serif 4", "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.005em;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .container {
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+  .container-narrow {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+
+  /* ====== header ====== */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(8, 9, 10, 0.72);
+    border-bottom: 1px solid var(--border);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .brand {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+  nav ul {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    margin: 0; padding: 0;
+  }
+  nav a {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 13px;
+    color: var(--muted);
+    border-radius: var(--radius-sm);
+    transition: color 120ms ease, background 120ms ease;
+  }
+  nav a:hover { color: var(--fg); background: var(--bg-elev); }
+
+  /* ====== hero ====== */
+  .article-hero {
+    padding: clamp(64px, 11vw, 112px) 0 clamp(40px, 6vw, 64px);
+    border-bottom: 1px solid var(--border);
+  }
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .meta-row .sep {
+    width: 4px; height: 4px;
+    background: var(--muted-2);
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .meta-tag {
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  h1.article-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(34px, 5.6vw, 56px);
+    line-height: 1.04;
+    letter-spacing: -0.028em;
+    margin: 0 0 30px;
+    color: var(--fg);
+    max-width: 22ch;
+  }
+  .article-deck {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(19px, 2.6vw, 24px);
+    line-height: 1.5;
+    color: var(--fg-dim);
+    max-width: 34ch;
+    margin: 0 0 32px;
+  }
+  .article-deck strong {
+    font-style: normal;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--fg);
+  }
+
+  .stats-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: 28px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-cell {
+    flex: 1 1 140px;
+    padding: 14px 18px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat-cell:last-child { border-right: none; }
+  .stat-cell .v {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+  }
+  .stat-cell .l {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ====== TLDR box ====== */
+  .tldr {
+    margin: 48px auto 0;
+    max-width: 720px;
+    padding: 24px 28px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+  }
+  .tldr-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .tldr ul {
+    margin: 0; padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tldr li {
+    font-family: var(--font-sans);
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--fg-dim);
+    position: relative;
+    padding-left: 17px;
+  }
+  .tldr li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .tldr li strong { color: var(--fg); font-weight: 500; }
+
+  /* ====== article body ====== */
+  article {
+    padding: clamp(48px, 7vw, 80px) 0 clamp(48px, 8vw, 80px);
+  }
+  .prose {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--fg-dim);
+    max-width: 65ch;
+    margin: 0 auto;
+  }
+  .prose > * + * { margin-top: 1em; }
+  .prose h2 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(22px, 3vw, 28px);
+    letter-spacing: -0.02em;
+    color: var(--fg);
+    margin: 56px 0 18px;
+    line-height: 1.2;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .prose h2 .step-num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    background: var(--accent-soft);
+    padding: 4px 9px;
+    border-radius: 4px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .prose p { margin: 0 0 1.1em; }
+  .prose em { font-style: italic; color: var(--fg); }
+  .prose strong {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--fg);
+    font-style: normal;
+  }
+
+  /* ====== full-bleed ====== */
+  .full-bleed {
+    margin: 48px auto;
+    max-width: 980px;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+
+  /* ====== philosophy split ====== */
+  .split-block {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(24px, 4vw, 40px);
+  }
+  .split-caption {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(18px, 2.4vw, 22px);
+    line-height: 1.5;
+    color: var(--fg);
+    text-align: center;
+    max-width: 30ch;
+    margin: 0 auto 32px;
+  }
+  .split-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 680px) {
+    .split-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .split-col {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+  }
+  .split-col.machine { background: rgba(255,255,255,0.015); }
+  .split-col.human {
+    background: var(--accent-soft);
+    border-color: rgba(94, 106, 210, 0.3);
+  }
+  .split-head {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .split-col.machine .split-head { color: var(--muted); }
+  .split-col.human .split-head { color: var(--accent-hi); }
+  .split-list {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .split-list li {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--fg-dim);
+    padding-left: 16px;
+    position: relative;
+  }
+  .split-list li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 8px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+  }
+  .split-col.machine .split-list li::before { background: var(--muted-2); }
+  .split-col.human .split-list li::before { background: var(--accent); }
+  .split-col.human .split-list li { color: var(--fg); }
+
+  /* ====== stations ====== */
+  .stations {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .station {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 22px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .station:last-child { border-bottom: none; }
+  .station-n {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-soft);
+    width: 38px; height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .station-t {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: -0.015em;
+    color: var(--fg);
+    margin: 6px 0 8px;
+  }
+  .station-b {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--fg-dim);
+    margin: 0;
+  }
+  .station-gate {
+    margin-top: 10px;
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    color: var(--accent-hi);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .station-gate .g {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 2px 7px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  /* ====== video ====== */
+  .video-wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #000;
+  }
+  .video-ratio {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+  }
+  .video-ratio iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
+  }
+  .video-cap {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 16px;
+  }
+
+  /* ====== claims ====== */
+  .claims {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 1.5em 0;
+  }
+  .claim {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    padding: 20px 22px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    align-items: baseline;
+  }
+  .claim-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--success);
+    letter-spacing: 0.1em;
+    background: rgba(76, 183, 130, 0.1);
+    border: 1px solid rgba(76, 183, 130, 0.25);
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    align-self: start;
+    margin-top: 3px;
+  }
+  .claim-body {
+    font-family: var(--font-serif);
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--fg-dim);
+  }
+  .claim-body strong {
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-weight: 500;
+    color: var(--fg);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: -0.005em;
+  }
+  .claim-body em { font-style: italic; color: var(--muted); }
+
+  /* ====== hiring callout ====== */
+  .hiring {
+    margin: 64px auto 24px;
+    max-width: 720px;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+  .hiring-inner {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px);
+  }
+  .hiring-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .hiring-hook {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(18px, 2.4vw, 21px);
+    line-height: 1.5;
+    color: var(--fg);
+    margin: 0 0 1.2em;
+  }
+  .hiring-body {
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    line-height: 1.65;
+    color: var(--fg-dim);
+    margin: 0 0 1.2em;
+  }
+  .hiring-body strong {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--fg);
+    font-style: normal;
+  }
+  .hiring-pull {
+    margin: 1.4em 0;
+    padding: 14px 20px;
+    background: rgba(94, 106, 210, 0.06);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    line-height: 1.55;
+    color: var(--fg);
+  }
+  .hiring-pull em {
+    font-style: normal;
+    color: var(--accent-hi);
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+  .hiring-rule {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 1.8em 0 1em;
+  }
+  .hiring-contact {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .hiring-contact a { color: var(--accent); transition: color 120ms ease; }
+  .hiring-contact a:hover { color: var(--accent-hi); }
+
+  /* ====== footer ====== */
+  .article-footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0 56px;
+    margin-top: 24px;
+  }
+  .footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 14px;
+  }
+  .footer-actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    transition: color 120ms ease;
+  }
+  .footer-actions a:hover { color: var(--fg); }
+  .footer-actions a.primary { color: var(--accent); }
+  .footer-actions a.primary:hover { color: var(--accent-hi); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-dot"></span>
+        曹德偉
+      </a>
+      <nav>
+        <ul>
+          <li><a href="index.html#projects">專案</a></li>
+          <li><a href="about.html">關於</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="article-hero">
+    <div class="container-narrow">
+      <div class="meta-row">
+        <span class="meta-tag">公司營運</span>
+        <span>AI 工作流導入</span>
+        <span class="sep"></span>
+        <span>現職 · 持續運行</span>
+      </div>
+      <h1 class="article-title">把 AI 工作流，接進公司每天的營運裡。</h1>
+      <p class="article-deck">
+        做一個自己用的工具不難。難的是讓它在一個<strong>真實組織的日常裡，每天被用、被信任</strong>。
+      </p>
+
+      <div class="stats-strip">
+        <div class="stat-cell"><span class="v">真實營運</span><span class="l">不是 side project</span></div>
+        <div class="stat-cell"><span class="v">每天在跑</span><span class="l">已驗證</span></div>
+        <div class="stat-cell"><span class="v">多條工作流</span><span class="l">營運瑣事</span></div>
+        <div class="stat-cell"><span class="v">人只做判斷</span><span class="l">AI 做執行</span></div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+      <div class="tldr">
+        <div class="tldr-label">TL;DR</div>
+        <ul>
+          <li><strong>在做什麼</strong>：把我設計的 AI agent 工作流，導入現職公司的真實營運，讓重複的瑣事自己跑。</li>
+          <li><strong>不只一條</strong>：會議錄音 → 會議記錄 → 知識庫、Figma 設計稿 → Unity、知識庫文件 → 試算表 / HTML 企劃書——都是讓重複的轉換自己跑。</li>
+          <li><strong>跟做給自己的差別</strong>：在組織裡，工具要別人願意用、要融進既有流程、要可信任——這層才是難的。</li>
+          <li><strong>關於這頁</strong>：因為綁公司內部資料與流程，<strong>以下只談工作流的「形狀」，不含任何公司實際內容、畫面或演算法</strong>。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <article>
+    <div class="prose">
+      <h2><span class="step-num">01</span> 一個產品有兩端，我兩端都跑過</h2>
+      <p>
+        用 AI agent 工作流可以做兩件很不一樣的事：一端是<strong>創造</strong>——從零生出一個新東西（這是 Beat Slash 做的）；另一端是<strong>營運</strong>——讓已經在發生的重複瑣事自己跑下去，不再吃人力。
+      </p>
+      <p>
+        這一頁講的是營運端。同一套「人做判斷、AI 做執行」的思路，這次不是拿來生新東西，而是<strong>接進公司每天都在發生的營運流程裡</strong>。把這兩端合起來，就是我想證明的事：我用 AI 工作流跑過一個產品的上下游，不只會做 demo，也讓它在真實組織裡持續運轉。
+      </p>
+    </div>
+
+    <div class="full-bleed">
+      <div class="split-block">
+        <p class="split-caption">同一套思路，用在兩端——我都跑過。</p>
+        <div class="split-grid">
+          <div class="split-col machine">
+            <div class="split-head">創造端 · Beat Slash</div>
+            <ul class="split-list">
+              <li>從零生出一個新原型</li>
+              <li>目標是「快速驗證一個想法」</li>
+              <li>一次性、做完就驗證</li>
+              <li>可公開展示</li>
+            </ul>
+          </div>
+          <div class="split-col human">
+            <div class="split-head">營運端 · 公司工作流</div>
+            <ul class="split-list">
+              <li>讓重複的瑣事自己跑</li>
+              <li>目標是「持續省下人力」</li>
+              <li>每天運行、要穩、要被信任</li>
+              <li>綁公司內部，只談形狀</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        多數人會做其中一端。<strong>能把同一套思路用在兩端</strong>——既能從零做出新東西，又能讓它在組織日常裡長期運轉——才是「用 AI 跑完一個產品生命週期」真正的意思。
+      </p>
+
+      <h2><span class="step-num">02</span> 我在公司設計的幾條工作流</h2>
+      <p>
+        不只一條。同一套「人做判斷、AI 做執行」的思路，我把它接到公司營運的不同環節——會議、設計、企劃文件。下面是這幾條工作流的「形狀」（不含任何公司實際內容、畫面或演算法）：
+      </p>
+    </div>
+
+    <div class="full-bleed">
+      <div class="stations">
+        <div class="station">
+          <div class="station-n">A</div>
+          <div>
+            <h3 class="station-t">會議錄音 → 會議記錄 → 知識庫</h3>
+            <p class="station-b">把一段會議錄音，自動轉文字、整理成格式統一的記錄，再歸進公司知識庫、跟相關主題連起來。同事只要丟錄音，最後看一眼確認。</p>
+            <div class="station-gate"><span class="g">解決</span> 開完會還要手動整理、貼上、歸檔的重複工。</div>
+          </div>
+        </div>
+        <div class="station">
+          <div class="station-n">B</div>
+          <div>
+            <h3 class="station-t">Figma 設計稿 → Unity</h3>
+            <p class="station-b">設計師在 Figma 畫好的介面，自動轉成 Unity 引擎裡能用的東西，工程師不用照著設計稿一個個手刻。設計改了，重跑一次就好。</p>
+            <div class="station-gate"><span class="g">解決</span> 設計到實作之間，反覆手工搬運、容易跑掉的那段。</div>
+          </div>
+        </div>
+        <div class="station">
+          <div class="station-n">C</div>
+          <div>
+            <h3 class="station-t">知識庫文件 → 試算表 / HTML 企劃書</h3>
+            <p class="station-b">同一份知識庫裡的內容，自動派生成不同格式的交付物——整理成試算表給人篩選排序，或排成一份 HTML 企劃書直接拿去報。寫一次，多種輸出。</p>
+            <div class="station-gate"><span class="g">解決</span> 同樣的內容，為了不同場合一再重排、重做版面。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        三條工作流，環節完全不同（會議、設計、文件），但骨架是同一個：<strong>把重複的轉換和搬運交給 AI，人只在關鍵處做判斷</strong>。能在一個組織的多個地方都布上這種流程，才是「把 AI 導入營運」真正的樣子——不是一個亮點功能，是一張網。
+      </p>
+    </div>
+
+    <div class="prose">
+      <h2><span class="step-num">03</span> 導入「組織」跟做給「自己」差在哪</h2>
+      <p>
+        把這套接進公司，難的從來不是技術，是這些：別人<strong>願不願意用</strong>（它得比原本的做法更省事，不然沒人理）、<strong>信不信得過</strong>（出錯了怎麼辦、誰負責看那一眼）、<strong>融不融得進既有流程</strong>（不能要大家為了它改變所有習慣）。這些判斷，跟「做一個自己用的腳本」完全是兩回事——而這正是把 AI 落地到真實組織，最值錢的部分。
+      </p>
+      <p>
+        這個工作流幫我證明的三件事：
+      </p>
+      <div class="claims">
+        <div class="claim">
+          <span class="claim-num">主張 01</span>
+          <span class="claim-body">
+            <strong>我能把 AI 落地到真實組織的營運，不只做 demo。</strong>
+            <em>這套工作流在現職公司每天都在跑，不是躺在 GitHub 上的 side project。</em>「能跑一次」和「天天有人用、出錯有人扛」是兩個世界，我做的是後者。
+          </span>
+        </div>
+        <div class="claim">
+          <span class="claim-num">主張 02</span>
+          <span class="claim-body">
+            <strong>我設計的工作流，把判斷留給人。</strong>
+            <em>AI 做所有搬運、轉換、整理，人只在最後確認一眼。</em>我不追求「全自動」這種好看但危險的東西——該由人把關的地方，我刻意留一個關卡。
+          </span>
+        </div>
+        <div class="claim">
+          <span class="claim-num">主張 03</span>
+          <span class="claim-body">
+            <strong>創造端和營運端，我都跑過。</strong>
+            <em>Beat Slash 證明我能從零做出新東西；這裡證明我能讓它在組織裡長期運轉。</em>合起來，就是我用 AI 工作流跑過一個產品的上下游，不是只會其中一段。
+          </span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <section class="hiring">
+    <div class="hiring-inner">
+      <div class="hiring-eyebrow">如果你正在徵人 &middot; If you're hiring</div>
+
+      <p class="hiring-hook">
+        很多人能做出一個 AI demo。<br />
+        少有人能讓它在一個真實組織裡，每天被用、被信任、不出事。
+      </p>
+
+      <p class="hiring-body">
+        這套工作流的價值，不在「我串了 AI」，在它<strong>真的在一間公司的日常營運裡跑著</strong>。把 AI 接進組織，最難的是讓人願意用、信得過、融進既有流程——這些是技術之外的判斷，也是「導入」和「寫個腳本」的差別。我能做的，是<strong>把 AI 能力變成組織真的用得起來的工作流</strong>。
+      </p>
+
+      <div class="hiring-pull">
+        <em>會做 AI demo 的人很多；能讓 AI 在真實組織裡天天運轉的人少。</em><br />
+        如果你的團隊要把 AI 從「試試看」推到「日常都在用」——我們可以聊聊。
+      </div>
+
+      <hr class="hiring-rule" />
+
+      <div class="hiring-contact">
+        <a href="mailto:zx2241384@gmail.com">zx2241384@gmail.com</a> &middot; 開放遠端 / 台北
+      </div>
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container-narrow footer-actions">
+      <a href="index.html">&larr; 回 Portfolio</a>
+      <a class="primary" href="meeting-note.html">下一個：Meeting Notes &mdash; 把痛點做成產品 &rarr;</a>
+    </div>
+  </footer>
+</body>
+</html>

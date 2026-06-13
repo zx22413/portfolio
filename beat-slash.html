@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<title>Beat Slash &mdash; 用一條 AI 工作流，幾天做出能玩的遊戲 &mdash; 曹德偉</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #08090a;
+    --bg-elev: #101113;
+    --bg-elev-2: #16181c;
+    --border: #1f2126;
+    --border-strong: #2a2d33;
+    --fg: #f7f8f8;
+    --fg-dim: #c7c9d1;
+    --muted: #8a8f98;
+    --muted-2: #5c6068;
+    --accent: #5e6ad2;
+    --accent-hi: #8b95e8;
+    --accent-soft: rgba(94, 106, 210, 0.14);
+    --accent-glow: rgba(94, 106, 210, 0.32);
+    --success: #4cb782;
+    --warn: #d4a24c;
+    --danger: #d4584c;
+
+    --font-sans: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-serif: "Source Serif 4", "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.005em;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .container {
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+  .container-narrow {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+
+  /* ====== header ====== */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(8, 9, 10, 0.72);
+    border-bottom: 1px solid var(--border);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .brand {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+  nav ul {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    margin: 0; padding: 0;
+  }
+  nav a {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 13px;
+    color: var(--muted);
+    border-radius: var(--radius-sm);
+    transition: color 120ms ease, background 120ms ease;
+  }
+  nav a:hover { color: var(--fg); background: var(--bg-elev); }
+
+  /* ====== hero ====== */
+  .article-hero {
+    padding: clamp(64px, 11vw, 112px) 0 clamp(40px, 6vw, 64px);
+    border-bottom: 1px solid var(--border);
+  }
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .meta-row .sep {
+    width: 4px; height: 4px;
+    background: var(--muted-2);
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .meta-tag {
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  h1.article-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(34px, 5.6vw, 56px);
+    line-height: 1.04;
+    letter-spacing: -0.028em;
+    margin: 0 0 30px;
+    color: var(--fg);
+    max-width: 22ch;
+  }
+  .article-deck {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(19px, 2.6vw, 24px);
+    line-height: 1.5;
+    color: var(--fg-dim);
+    max-width: 34ch;
+    margin: 0 0 32px;
+  }
+  .article-deck strong {
+    font-style: normal;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--fg);
+  }
+
+  .stats-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: 28px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-cell {
+    flex: 1 1 140px;
+    padding: 14px 18px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat-cell:last-child { border-right: none; }
+  .stat-cell .v {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+  }
+  .stat-cell .l {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ====== TLDR box ====== */
+  .tldr {
+    margin: 48px auto 0;
+    max-width: 720px;
+    padding: 24px 28px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+  }
+  .tldr-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .tldr ul {
+    margin: 0; padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tldr li {
+    font-family: var(--font-sans);
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--fg-dim);
+    position: relative;
+    padding-left: 17px;
+  }
+  .tldr li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .tldr li strong { color: var(--fg); font-weight: 500; }
+
+  /* ====== article body ====== */
+  article {
+    padding: clamp(48px, 7vw, 80px) 0 clamp(48px, 8vw, 80px);
+  }
+  .prose {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--fg-dim);
+    max-width: 65ch;
+    margin: 0 auto;
+  }
+  .prose > * + * { margin-top: 1em; }
+  .prose h2 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(22px, 3vw, 28px);
+    letter-spacing: -0.02em;
+    color: var(--fg);
+    margin: 56px 0 18px;
+    line-height: 1.2;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .prose h2 .step-num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    background: var(--accent-soft);
+    padding: 4px 9px;
+    border-radius: 4px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .prose p { margin: 0 0 1.1em; }
+  .prose em { font-style: italic; color: var(--fg); }
+  .prose strong {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--fg);
+    font-style: normal;
+  }
+
+  /* ====== full-bleed ====== */
+  .full-bleed {
+    margin: 48px auto;
+    max-width: 980px;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+
+  /* ====== philosophy split ====== */
+  .split-block {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(24px, 4vw, 40px);
+  }
+  .split-caption {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(18px, 2.4vw, 22px);
+    line-height: 1.5;
+    color: var(--fg);
+    text-align: center;
+    max-width: 30ch;
+    margin: 0 auto 32px;
+  }
+  .split-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 680px) {
+    .split-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .split-col {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+  }
+  .split-col.machine { background: rgba(255,255,255,0.015); }
+  .split-col.human {
+    background: var(--accent-soft);
+    border-color: rgba(94, 106, 210, 0.3);
+  }
+  .split-head {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .split-col.machine .split-head { color: var(--muted); }
+  .split-col.human .split-head { color: var(--accent-hi); }
+  .split-list {
+    list-style: none;
+    margin: 0; padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .split-list li {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--fg-dim);
+    padding-left: 16px;
+    position: relative;
+  }
+  .split-list li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 8px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+  }
+  .split-col.machine .split-list li::before { background: var(--muted-2); }
+  .split-col.human .split-list li::before { background: var(--accent); }
+  .split-col.human .split-list li { color: var(--fg); }
+
+  /* ====== stations ====== */
+  .stations {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .station {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 22px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .station:last-child { border-bottom: none; }
+  .station-n {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-soft);
+    width: 38px; height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .station-t {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: -0.015em;
+    color: var(--fg);
+    margin: 6px 0 8px;
+  }
+  .station-b {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--fg-dim);
+    margin: 0;
+  }
+  .station-gate {
+    margin-top: 10px;
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    color: var(--accent-hi);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .station-gate .g {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 2px 7px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  /* ====== video ====== */
+  .video-wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #000;
+  }
+  .video-ratio {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+  }
+  .video-ratio iframe,
+  .video-ratio video {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
+    background: #000;
+    object-fit: contain;
+  }
+  .video-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    text-align: center;
+    padding: 24px;
+    background: #000;
+  }
+  .video-fallback p {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    color: var(--muted);
+    margin: 0;
+  }
+  .video-fallback a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    background: var(--accent);
+    border-radius: var(--radius-sm);
+    transition: background 120ms ease;
+  }
+  .video-fallback a:hover { background: #6c78dc; }
+  .video-cap {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 16px;
+  }
+
+  /* ====== claims ====== */
+  .claims {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 1.5em 0;
+  }
+  .claim {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    padding: 20px 22px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    align-items: baseline;
+  }
+  .claim-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--success);
+    letter-spacing: 0.1em;
+    background: rgba(76, 183, 130, 0.1);
+    border: 1px solid rgba(76, 183, 130, 0.25);
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    align-self: start;
+    margin-top: 3px;
+  }
+  .claim-body {
+    font-family: var(--font-serif);
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--fg-dim);
+  }
+  .claim-body strong {
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-weight: 500;
+    color: var(--fg);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: -0.005em;
+  }
+  .claim-body em { font-style: italic; color: var(--muted); }
+
+  /* ====== hiring callout ====== */
+  .hiring {
+    margin: 64px auto 24px;
+    max-width: 720px;
+    padding: 0 clamp(20px, 5vw, 40px);
+  }
+  .hiring-inner {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-lg);
+    padding: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px);
+  }
+  .hiring-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .hiring-hook {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(18px, 2.4vw, 21px);
+    line-height: 1.5;
+    color: var(--fg);
+    margin: 0 0 1.2em;
+  }
+  .hiring-body {
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    line-height: 1.65;
+    color: var(--fg-dim);
+    margin: 0 0 1.2em;
+  }
+  .hiring-body strong {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    color: var(--fg);
+    font-style: normal;
+  }
+  .hiring-pull {
+    margin: 1.4em 0;
+    padding: 14px 20px;
+    background: rgba(94, 106, 210, 0.06);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    line-height: 1.55;
+    color: var(--fg);
+  }
+  .hiring-pull em {
+    font-style: normal;
+    color: var(--accent-hi);
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+  .hiring-rule {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 1.8em 0 1em;
+  }
+  .hiring-contact {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .hiring-contact a { color: var(--accent); transition: color 120ms ease; }
+  .hiring-contact a:hover { color: var(--accent-hi); }
+
+  /* ====== footer ====== */
+  .article-footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0 56px;
+    margin-top: 24px;
+  }
+  .footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 14px;
+  }
+  .footer-actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    transition: color 120ms ease;
+  }
+  .footer-actions a:hover { color: var(--fg); }
+  .footer-actions a.primary { color: var(--accent); }
+  .footer-actions a.primary:hover { color: var(--accent-hi); }
+</style>
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-dot"></span>
+        曹德偉
+      </a>
+      <nav>
+        <ul>
+          <li><a href="index.html#projects">專案</a></li>
+          <li><a href="about.html">關於</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="article-hero">
+    <div class="container-narrow">
+      <div class="meta-row">
+        <span class="meta-tag">快速原型</span>
+        <span>驗證假設</span>
+        <span class="sep"></span>
+        <span>2026-05</span>
+      </div>
+      <h1 class="article-title">Beat Slash &mdash; 一個想法，幾天就變成能玩、能驗證的原型。</h1>
+      <p class="article-deck">
+        「好不好玩」想再久也沒用，<strong>只能做出來玩才知道</strong>。所以我證明的不是手藝，是我能多快拿到這個答案。
+      </p>
+
+      <div class="stats-strip">
+        <div class="stat-cell"><span class="v">約一週</span><span class="l">想法到能驗證</span></div>
+        <div class="stat-cell"><span class="v">一個人</span><span class="l">獨立完成</span></div>
+        <div class="stat-cell"><span class="v">最低成本</span><span class="l">先試再投入</span></div>
+        <div class="stat-cell"><span class="v">可重用</span><span class="l">換題目即可</span></div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+      <div class="tldr">
+        <div class="tldr-label">TL;DR</div>
+        <ul>
+          <li><strong>想驗證的問題</strong>：「這樣揮砍好不好玩」——這種問題想不出來，只能做出來玩才知道。</li>
+          <li><strong>怎麼做到快</strong>：設計一條工作流，把調研、寫規格、搭場景、接裝置這些「機械活」全交給 AI。</li>
+          <li><strong>我留下來做的</strong>：只做一件事——<strong>判斷</strong>。值不值得做、範圍砍多小、玩起來爽不爽。</li>
+          <li><strong>真正的能力</strong>：別人要一個團隊、一個月才知道的事，我一個人約一週就拿到答案——而且<strong>換個題目，同一套流程再跑一次就好</strong>。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <article>
+    <div class="prose">
+      <h2><span class="step-num">01</span> 有些問題，想再久也沒用</h2>
+      <p>
+        「這樣揮砍到底好不好玩？」——這種問題，你在白板前討論一個月也得不到答案，<strong>它只能被做出來、玩玩看才知道</strong>。產品決策裡最貴的成本，就是把資源全投下去，最後才發現方向錯了。
+      </p>
+      <p>
+        所以真正有價值的能力不是「會做」，是<strong>能用最低成本、最快速度，先做一個能玩的版本，把『該不該做』驗證掉</strong>。Beat Slash 就是我拿來證明這件事的題目。
+      </p>
+      <p>
+        我做了好幾年體感遊戲企劃，過去只能寫規格、等工程師實作。這次我反過來問：<strong>哪些事其實不需要我親手做？</strong> 競品怎麼玩、規格怎麼排、場景怎麼搭、手環怎麼接——這些都是「照著做就會」的機械活。真正只有我能做的，是<em>判斷它好不好玩</em>。於是我沒有「寫一個遊戲」，而是設計了一條工作流：<strong>讓 AI 去做所有機械活，把我的注意力全部省下來，留給判斷。</strong>這就是我能快的原因。
+      </p>
+    </div>
+
+    <div class="full-bleed">
+      <div class="split-block">
+        <p class="split-caption">「自動化機械活，把人的注意力全部留給判斷活。」</p>
+        <div class="split-grid">
+          <div class="split-col machine">
+            <div class="split-head">交給 AI 的機械活</div>
+            <ul class="split-list">
+              <li>競品調研、資料彙整</li>
+              <li>把規格排成可讀的網頁</li>
+              <li>用程式自動搭出整個遊戲場景</li>
+              <li>把手環的動作接進遊戲</li>
+              <li>套上判定數值、做測試紀錄</li>
+            </ul>
+          </div>
+          <div class="split-col human">
+            <div class="split-head">我留下來做的判斷</div>
+            <ul class="split-list">
+              <li>這個方向值不值得投</li>
+              <li>範圍要砍到多小才做得完</li>
+              <li>玩起來的手感對不對</li>
+              <li>真實揮動有沒有爽感</li>
+              <li>該再迭代，還是該收工</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>
+        這是整件事的核心信念：<strong>「好不好玩」沒辦法自動化，只有人知道。</strong> 所以這不是一條全自動流水線——它刻意在每一站之間留一個「人來判斷」的關卡。AI 把我推到判斷點，我做完判斷，再把它放回去跑下一段。
+      </p>
+
+      <h2><span class="step-num">02</span> 我為什麼能這麼快：機械活全交出去</h2>
+      <p>
+        快不是因為我手快，是因為我把流程設計成這樣——五站，每一站都是「AI 做機械活 → 停下來等我判斷 → 我說往哪走，它才繼續」。我的時間只花在判斷上，不花在執行上。
+      </p>
+    </div>
+
+    <div class="full-bleed">
+      <div class="stations">
+        <div class="station">
+          <div class="station-n">1</div>
+          <div>
+            <h3 class="station-t">調研</h3>
+            <p class="station-b">AI 掃過市面上的同類遊戲、拆解「好玩的核心」是什麼、列出兩三個可能的變體。</p>
+            <div class="station-gate"><span class="g">我判斷</span> 選哪一個變體來做。</div>
+          </div>
+        </div>
+        <div class="station">
+          <div class="station-n">2</div>
+          <div>
+            <h3 class="station-t">寫規格</h3>
+            <p class="station-b">AI 把選定的方向寫成一份可以互動的規格頁，連手感參數的滑桿都做好。</p>
+            <div class="station-gate"><span class="g">我判斷</span> 把範圍狠狠砍小——一個動作、一關，能分勝負就好。</div>
+          </div>
+        </div>
+        <div class="station">
+          <div class="station-n">3</div>
+          <div>
+            <h3 class="station-t">做出能玩的版本</h3>
+            <p class="station-b">AI 用程式自動把整個遊戲場景搭起來，先接鍵盤，讓我馬上能玩到。</p>
+            <div class="station-gate"><span class="g">我判斷</span> 自己玩——機制到底好不好玩？不好玩就退回前面重來。</div>
+          </div>
+        </div>
+        <div class="station">
+          <div class="station-n">4</div>
+          <div>
+            <h3 class="station-t">接上手環</h3>
+            <p class="station-b">把鍵盤換成真實的手環動作，讓「揮手」直接變成遊戲裡的揮砍。</p>
+            <div class="station-gate"><span class="g">我判斷</span> 戴上手環實際揮——真實動作有沒有爽感。</div>
+          </div>
+        </div>
+        <div class="station">
+          <div class="station-n">5</div>
+          <div>
+            <h3 class="station-t">測試與錄 demo</h3>
+            <p class="station-b">AI 產測試腳本、整理紀錄、剪出 demo 素材。</p>
+            <div class="station-gate"><span class="g">我判斷</span> 這一輪到此為止，還是再迭代一圈。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h2><span class="step-num">03</span> 戴上手環，它真的能玩</h2>
+      <p>
+        不是 mockup、不是動畫。下面是實際戴著手環玩 Beat Slash 的錄影——音符照方向飛來，在判定窗內往對的方向揮，加分、連擊；漏了或揮錯，斷連擊。
+      </p>
+    </div>
+
+    <div class="full-bleed">
+      <div class="video-wrap">
+        <div class="video-ratio">
+          <video class="video-el" controls playsinline preload="metadata">
+            <source src="assets/beat-slash-demo.mp4" type="video/mp4" />
+          </video>
+          <div class="video-fallback" hidden>
+            <p>影片無法在這裡播放</p>
+            <a href="https://drive.google.com/file/d/1L7BM4juLeyeTcmwnnrXChVQV3j1KLzxB/view" target="_blank" rel="noopener">改在 Google Drive 觀看 <span aria-hidden="true">&rarr;</span></a>
+          </div>
+        </div>
+      </div>
+      <p class="video-cap">實機錄影 &mdash; 戴手環玩 Beat Slash</p>
+    </div>
+
+    <div class="prose">
+      <h2><span class="step-num">04</span> 這個原型證明了我能做什麼</h2>
+      <p>
+        重點從來不是「我做了一個遊戲」。是這條工作流幫我證明的三件事：
+      </p>
+      <div class="claims">
+        <div class="claim">
+          <span class="claim-num">主張 01</span>
+          <span class="claim-body">
+            <strong>我能用最低成本，快速拿到「該不該做」的答案。</strong>
+            <em>從一句「節奏揮砍」到戴手環能玩，一個人約一週——別人可能要一個團隊、一個月。</em>原型是我驗證假設的工具，不是終點。AI 時代做東西的成本暴跌，真正的瓶頸是「該做什麼」，而我能比別人更快試錯。
+          </span>
+        </div>
+        <div class="claim">
+          <span class="claim-num">主張 02</span>
+          <span class="claim-body">
+            <strong>我能設計「人＋AI」怎麼分工的工作流。</strong>
+            <em>我能快，是因為我設計了「機械活交給 AI、判斷留給人」的流程。</em>這套不綁這個題目——換個產品、換個問題，同一條流程再跑一次就好。
+          </span>
+        </div>
+        <div class="claim">
+          <span class="claim-num">主張 03</span>
+          <span class="claim-body">
+            <strong>我守得住範圍。</strong>
+            <em>v1 只做一個動作、一個機制，其他全部砍掉。</em>做原型最難的不是加功能，是忍住不加——這個判斷讓我知道該停在哪。
+          </span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <section class="hiring">
+    <div class="hiring-inner">
+      <div class="hiring-eyebrow">如果你正在徵人 &middot; If you're hiring</div>
+
+      <p class="hiring-hook">
+        大部分產品經理寫完規格，就把它交出去、然後等。<br />
+        我想證明的是另一條路：規格寫完，我自己把它變成能玩的東西。
+      </p>
+
+      <p class="hiring-body">
+        Beat Slash 的價值不在遊戲本身，在它證明的能力：<strong>在投入資源之前，先用最低成本把假設驗證掉</strong>。背後是一條可重用的工作流——「AI 做機械活、人做判斷」，換個題目同一套流程再跑一次就好，讓一個人也能跑完「從想法到能驗證」的完整一圈。
+      </p>
+
+      <div class="hiring-pull">
+        <em>會寫規格的人很多；能自己把規格變成可玩 demo、在投入前就驗證假設的人少。</em><br />
+        如果你的團隊需要有人能用 AI 快速試錯、更早做出「該不該做」的判斷——我們可以聊聊。
+      </div>
+
+      <hr class="hiring-rule" />
+
+      <div class="hiring-contact">
+        <a href="mailto:zx2241384@gmail.com">zx2241384@gmail.com</a> &middot; 開放遠端 / 台北
+      </div>
+    </div>
+  </section>
+
+  <footer class="article-footer">
+    <div class="container-narrow footer-actions">
+      <a href="index.html">&larr; 回 Portfolio</a>
+      <a class="primary" href="brain.html">下一個：Brain &mdash; 自己會跑的 AI 知識系統 &rarr;</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var v = document.querySelector('.video-el');
+      var fb = document.querySelector('.video-fallback');
+      if (!v || !fb) return;
+      var fellBack = false;
+      function fallback() {
+        if (fellBack) return;
+        fellBack = true;
+        v.style.display = 'none';
+        fb.hidden = false;
+      }
+      // 來源載入失敗（瀏覽器不支援此格式 / 檔案抓不到）
+      var src = v.querySelector('source');
+      if (src) src.addEventListener('error', fallback);
+      v.addEventListener('error', fallback);
+      // 保險：6 秒後若連 metadata 都讀不到，視為播不出來
+      setTimeout(function () {
+        if (v.readyState === 0) fallback();
+      }, 6000);
+    })();
+  </script>
+</body>
+</html>
