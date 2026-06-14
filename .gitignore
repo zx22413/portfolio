@@ -7,6 +7,9 @@ Thumbs.db
 .vscode/
 node_modules/
 .wrangler/
+
+# 大型原始錄影（不上 git，也超過 Cloudflare Pages 25MB 單檔上限）
+*.mov
 .review-prompt.md
 .review-output.md
 .review-stderr.log
