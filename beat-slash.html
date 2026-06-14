@@ -471,6 +471,9 @@
     padding: 24px;
     background: #000;
   }
+  /* 類別選擇器的 display:flex 會蓋過 [hidden] 的 display:none，
+     必須顯式讓 hidden 生效，否則 fallback 會永遠蓋在影片上（先前播不出來的真正原因）。 */
+  .video-fallback[hidden] { display: none; }
   .video-fallback p {
     font-family: var(--font-serif);
     font-size: 15px;
@@ -808,7 +811,7 @@
     <div class="full-bleed">
       <div class="video-wrap">
         <div class="video-ratio">
-          <video class="video-el" controls playsinline preload="metadata">
+          <video class="video-el" controls playsinline preload="metadata" poster="assets/beat-slash-frame.png">
             <source src="assets/beat-slash-demo.mp4" type="video/mp4" />
           </video>
           <div class="video-fallback" hidden>
@@ -897,13 +900,15 @@
         fb.hidden = false;
       }
       // 來源載入失敗（瀏覽器不支援此格式 / 檔案抓不到）
+      // 只在「來源真的載入失敗 / 瀏覽器真的不支援此格式」時才退回 Google Drive。
+      // 不用 timeout 猜——影片在頁面下方，瀏覽器常延後載入畫面外的 video，
+      // 用 readyState 計時判斷會誤判成失敗（這是先前播不出來的原因）。
       var src = v.querySelector('source');
       if (src) src.addEventListener('error', fallback);
-      v.addEventListener('error', fallback);
-      // 保險：6 秒後若連 metadata 都讀不到，視為播不出來
-      setTimeout(function () {
-        if (v.readyState === 0) fallback();
-      }, 6000);
+      v.addEventListener('error', function () {
+        // MEDIA_ERR_SRC_NOT_SUPPORTED / 抓不到檔案才算失敗
+        if (v.error && v.error.code === v.error.MEDIA_ERR_SRC_NOT_SUPPORTED) fallback();
+      });
     })();
   </script>
 </body>
